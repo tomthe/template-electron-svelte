@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "fabric": "^3.6.3",
+    "jimp": "^0.10.2",
     "sharp": "^0.25.2",
     "svelte-grid": "^1.10.8"
   }

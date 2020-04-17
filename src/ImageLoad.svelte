@@ -4,7 +4,11 @@
   import { onMount } from 'svelte';
   import { allImages } from './allimagesstore.js';
   //const sharp = require('sharp');
-  
+  //import { sharp } from "sharp";
+  //const fs = require('fs')
+  //import { fs } from "fs";
+  import Jimp from 'jimp';
+
 	export let name;
 	export let files = []
   export let sfiles =[]
@@ -30,7 +34,7 @@ let rangewidth = 230;
   });
 
 
-function handleload(event){
+async function handleload(event){
   let newimageentry;
   console.log("baba",allImages)
   //console.log(files[0])
@@ -48,6 +52,14 @@ function handleload(event){
         })
       }
       );*/
+    	// Read the image.
+    const image = await Jimp.read(files[i].path);
+
+    // Resize the image to width 150 and auto height.
+    await image.resize(250, Jimp.AUTO);
+
+    // Save and overwrite the image
+    await image.writeAsync(thumbname);
     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",thumbname);
     sfiles.push(window.URL.createObjectURL(files[i]));
     sfiles = sfiles;
