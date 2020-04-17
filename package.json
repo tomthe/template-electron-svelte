@@ -28,6 +28,8 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "sharp": "^0.25.2"
+    "fabric": "^3.6.3",
+    "sharp": "^0.25.2",
+    "svelte-grid": "^1.10.8"
   }
 }
