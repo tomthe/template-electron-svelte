@@ -3,11 +3,13 @@
   import { fabric } from "fabric";
   import { onMount } from 'svelte';
   import { allImages } from './allimagesstore.js';
-  //const sharp = require('sharp');
-  //import { sharp } from "sharp";
+  const sharp = require('sharp');
+  //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
   //import { fs } from "fs";
   import Jimp from 'jimp';
+  
+  const { ipcRenderer } = require('electron');
 
 	export let name;
 	export let files = []
@@ -31,17 +33,24 @@ let rangewidth = 230;
       fill: "blue"
     });
     canv.add(rect);
+    
+    ipcRenderer.on('jimp-triggered', handleImage);
   });
+
+  function handleImage(){
+    console.log("hanbel");
+  }
 
 
 async function handleload(event){
   let newimageentry;
   console.log("baba",allImages)
   //console.log(files[0])
+  //ipcRenderer.send('trigger-jimp', files);
   for(let i=0;i<files.length;i+=1){
     //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
-    let thumbname = 'C:/dev/svelte/test/o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg'
-    /*sharp(files[i].path)
+    let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg'
+    sharp(files[i].path)
       .resize(300)
       .toFile(thumbname)
       .then(()=> {
@@ -51,15 +60,24 @@ async function handleload(event){
           return [...arr,newimageentry]
         })
       }
-      );*/
+      );
     	// Read the image.
-    const image = await Jimp.read(files[i].path);
+    //const image = await Jimp.read(files[i].path);
 
     // Resize the image to width 150 and auto height.
-    await image.resize(250, Jimp.AUTO);
+    //await image.resize(250, Jimp.AUTO);
 
     // Save and overwrite the image
-    await image.writeAsync(thumbname);
+    //await image.writeAsync(thumbname);
+
+/*
+sharp(files[i].path)
+  .resize(300)
+  .toFile(thumbname, function(err) {
+    // output.jpg is a 300 pixels wide and 200 pixels high image
+    // containing a scaled and cropped version of input.jpg
+  });*/
+
     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",thumbname);
     sfiles.push(window.URL.createObjectURL(files[i]));
     sfiles = sfiles;

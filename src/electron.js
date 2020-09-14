@@ -1,15 +1,21 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path')
-//const sharp = require('sharp')
+
+const { ipcMain } = require('electron');
+const sharp = require('sharp')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow() {
+    
     const mode = process.env.NODE_ENV;
     mainWindow = new BrowserWindow({
         width: 900,
         height: 680,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     let watcher;
@@ -26,6 +32,25 @@ function createWindow() {
             watcher.close();
         }
         mainWindow = null;
+    });
+    ipcMain.on('trigger-jimp', (event, arg) => {
+        for(let i=0;i<files.length;i+=1){
+            //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
+            let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg'
+            sharp(files[i].path)
+              .resize(300)
+              .toFile(thumbname)
+              .then(()=> {
+                console.log("then...");
+                newimageentry = {fnorig:files[i],fnsmall:thumbname}
+                allImages.update(arr=>{
+                  return [...arr,newimageentry]
+                })
+              });
+        }
+         //jimp.read(filepaths[0]).then(image => {
+          // sends back the image to renderer
+          event.sender.send('triggered-jimp', image);
     });
 }
 
