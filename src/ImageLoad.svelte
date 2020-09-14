@@ -99,8 +99,8 @@ sharp(files[i].path)
 <main>
 
 	<Grid1></Grid1>
-	<h1>Hello {name}!</h1>
-	<p>palimpalimaaaaaaaaaaaa</p>
+	<h1>Helloioi {name}!</h1>
+	<p>palimpalim</p>
 </main>
 
 

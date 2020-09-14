@@ -33,6 +33,7 @@ function createWindow() {
         }
         mainWindow = null;
     });
+    /*
     ipcMain.on('trigger-jimp', (event, arg) => {
         for(let i=0;i<files.length;i+=1){
             //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
@@ -51,7 +52,7 @@ function createWindow() {
          //jimp.read(filepaths[0]).then(image => {
           // sends back the image to renderer
           event.sender.send('triggered-jimp', image);
-    });
+    });*/
 }
 
 // This method will be called when Electron has finished
