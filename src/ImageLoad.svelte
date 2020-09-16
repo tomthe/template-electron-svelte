@@ -3,6 +3,7 @@
   import { fabric } from "fabric";
   import { onMount } from 'svelte';
   import { allImages } from './allimagesstore.js';
+  import  SingleImage  from './SingleImage.svelte'
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
@@ -34,7 +35,7 @@ let rangewidth = 230;
     });
     canv.add(rect);
     
-    ipcRenderer.on('jimp-triggered', handleImage);
+    //ipcRenderer.on('jimp-triggered', handleImage);
   });
 
   function handleImage(){
@@ -54,8 +55,8 @@ async function handleload(event){
       .resize(300)
       .toFile(thumbname)
       .then(()=> {
-        console.log("then...");
-        newimageentry = {fnorig:files[i],fnsmall:thumbname}
+        // console.log("then...");
+        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0}
         allImages.update(arr=>{
           return [...arr,newimageentry]
         })
@@ -98,9 +99,6 @@ sharp(files[i].path)
 
 <main>
 
-	<Grid1></Grid1>
-	<h1>Helloioi {name}!</h1>
-	<p>palimpalim</p>
 </main>
 
 
@@ -114,18 +112,26 @@ sharp(files[i].path)
        bind:files
        on:change={handleload}>
 <br>
+<!--
 {#each (files || []) as file, i}
     <span data-id={i}>
       <img class="thumb" src={file.path} width={rangewidth} title={file.name} data-id={i} alt="noPicuuu"/>
-      <!--<p><strong>{file.name}</strong>{i} ({file.size})</p>-->
+      <!--<p><strong>{file.name}</strong>{i} ({file.size})</p>--
     </span>
 {/each}
+-->
 
-{#each ($allImages || []) as oneimage, i}
+<!-- {#each ($allImages || []) as oneimage, i}
     <span data-id={i}>
       <img class="thumb" src={'file://' + oneimage.fnsmall} width={rangewidth} title={oneimage.fnorig} data-id={i} alt="noPicuuu"/>
-      <!--<p><strong>{file.name}</strong>{i} ({file.size})</p>-->
+      <!--<p><strong>{file.name}</strong>{i} ({file.size})</p>->
     </span>
+{/each} -->
+
+<br>brrrrrrrr
+{#each ($allImages || []) as oneimage, i}
+  <SingleImage imageid={i} rwidth={rangewidth}></SingleImage>
+    
 {/each}
 
 <!--
