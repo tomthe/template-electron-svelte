@@ -2,13 +2,13 @@
   import Grid1 from "./Grid1.svelte"
   import { fabric } from "fabric";
   import { onMount } from 'svelte';
-  import { allImages } from './allimagesstore.js';
+  import {  allImages } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
   //import { fs } from "fs";
-  import Jimp from 'jimp';
+  //import Jimp from 'jimp';
   
   const { ipcRenderer } = require('electron');
 
@@ -24,6 +24,9 @@ let rangewidth = 230;
   let canv;
 
   onMount(() => {
+
+    // loadallImages();
+
     canv = new fabric.Canvas(canvas);
 
     const rect = new fabric.Rect({
@@ -95,7 +98,19 @@ sharp(files[i].path)
   console.log(sfiles)
 }
 
+function loadallImages2(){
+  $allImages = JSON.parse(localStorage.getItem('allImages'));
+}
+export function saveallImages2(){
+    // Put the object into storage
+    localStorage.setItem('allImages', JSON.stringify($allImages));
+}
+
 </script>
+
+
+<button on:click={loadallImages2}>alles laden!</button>
+<button on:click={saveallImages2}>alles Speichern!</button>
 
 <main>
 
