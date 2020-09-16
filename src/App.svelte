@@ -1,14 +1,18 @@
 <script>
 	export let name;
 	import ImageLoad from './ImageLoad.svelte';
-	import Bare from './Bare.svelte'
+	import 'bulma/css/bulma.css';
+
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+<div class="columns">
+  <div class="column is-two-thirds">
 	<ImageLoad name='moo'></ImageLoad>
-	<Bare></Bare>
+  </div>
+  <div class="column">Auto</div>
+  <div class="column">Auto</div>
+</div>
 </main>
 
 <style>
@@ -17,12 +21,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 	@media (min-width: 640px) {
 		main {

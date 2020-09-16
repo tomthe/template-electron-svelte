@@ -30,8 +30,14 @@
     "svelte-grid": "^1.11.2"
   },
   "dependencies": {
+    "bulma": "^0.9.0",
     "fabric": "^3.6.3",
     "jimp": "^0.10.2",
-    "sharp": "^0.25.2"
+    "node-sass": "^4.14.1",
+    "rollup-plugin-postcss": "^3.1.8",
+    "sass": "^1.26.10",
+    "sharp": "^0.25.2",
+    "svelma": "^0.4.0",
+    "svelte-preprocess": "^4.3.0"
   }
 }
