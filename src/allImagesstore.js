@@ -1,6 +1,9 @@
 import { writable } from 'svelte/store';
 
 export const allImages = writable([]);
+export const bookdic = writable([]);
+
+ 
 
 // export function saveallImages(){
 //     // Put the object into storage

@@ -56,7 +56,7 @@ async function handleload(event){
   //ipcRenderer.send('trigger-jimp', files);
   for(let i=0;i<files.length;i+=1){
     //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
-    let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg'
+    let thumbname = 'C:\\dev\\svelte\\test\\o' + generateHash(files[i].path) + 'g3.jpg'
     sharp(files[i].path)
       .resize(300)
       .toFile(thumbname)
@@ -109,6 +109,18 @@ export function saveallImages2(){
     localStorage.setItem('allImages', JSON.stringify($allImages));
 }
 
+function generateHash(inputstr){
+    var hash = 0;
+    if (inputstr.length == 0) {
+        return hash;
+    }
+    for (var i = 0; i < inputstr.length; i++) {
+        var char = inputstr.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
 
 	function handleKeydown(event) {
     console.log("keydown. keycode:",event.keyCode)
