@@ -2,7 +2,7 @@
   import Grid1 from "./Grid1.svelte"
   import { fabric } from "fabric";
   import { onMount } from 'svelte';
-  import {  allImages } from './allimagesstore.js';
+  import {  allImages,bookdic } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
   import { Button, Modal } from 'svelma';
   const sharp = require('sharp');
@@ -103,10 +103,12 @@ sharp(files[i].path)
 
 function loadallImages2(){
   $allImages = JSON.parse(localStorage.getItem('allImages'));
+  $bookdic = JSON.parse(localStorage.getItem('bookdic'));
 }
 export function saveallImages2(){
     // Put the object into storage
     localStorage.setItem('allImages', JSON.stringify($allImages));
+    localStorage.setItem('bookdic', JSON.stringify($bookdic));
 }
 
 function generateHash(inputstr){

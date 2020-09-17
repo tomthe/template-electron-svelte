@@ -2,7 +2,8 @@
 	export let name;
 	import ImageLoad from './ImageLoad.svelte';
 	import 'bulma/css/bulma.css';
-  	import { Tabs, Tab } from 'svelma'
+	  import { Tabs, Tab } from 'svelma'
+	import Allpages from './Allpages.svelte';
 </script>
 
 
@@ -20,6 +21,8 @@
 	wenn es noch keine pages gibt: autogenerate pages + einstellungen
 	sonst: eine vertikale liste aller selektierter Bilder
 	und: eine vertikale liste aller pages - inklusive einer horizontalen liste der entsprechenden Bilder, sowie einer voransicht und sonstige sachen
+	<Allpages>
+	</Allpages>
   </Tab>
   <Tab label="View Pages" icon="ellipsis-h"></Tab>
 </Tabs>
