@@ -14,7 +14,7 @@
   <div class="column">Auto</div>
 </div>
 </main>
-
+<!-- 
 <style>
 	main {
 		text-align: center;
@@ -27,4 +27,4 @@
 			max-width: none;
 		}
 	}
-</style>
+</style> -->

@@ -4,17 +4,20 @@
   import { onMount } from 'svelte';
   import {  allImages } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
+  import { Button, Modal } from 'svelma';
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
   //import { fs } from "fs";
   //import Jimp from 'jimp';
   
-  const { ipcRenderer } = require('electron');
+  // const { ipcRenderer } = require('electron');
 
 	export let name;
 	export let files = []
   export let sfiles =[]
+  let selectedImageId;
+  let active=false;
 
   export let can;
 
@@ -59,7 +62,7 @@ async function handleload(event){
       .toFile(thumbname)
       .then(()=> {
         // console.log("then...");
-        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0}
+        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0,pathorig:files[i].path}
         allImages.update(arr=>{
           return [...arr,newimageentry]
         })
@@ -106,8 +109,29 @@ export function saveallImages2(){
     localStorage.setItem('allImages', JSON.stringify($allImages));
 }
 
+
+	function handleKeydown(event) {
+    console.log("keydown. keycode:",event.keyCode)
+    //   console.log("keydown - ", $allImages[imageid].fnsmall)
+    if (event.keyCode == 39) {
+      selectedImageId = Math.min(selectedImageId + 1,$allImages.length - 1);
+    } else     if (event.keyCode == 37) {
+      selectedImageId = Math.max(0, selectedImageId - 1)
+    } else if (event.keyCode == 38) { //rating up
+      // selectedImageId
+    }
+    
+  }
+  function showfull(imageid){
+    console.log("imageload - showfull",imageid)
+    selectedImageId = imageid;
+    active = true;
+  }
+
 </script>
 
+
+<svelte:window on:keydown={handleKeydown}/>
 
 <button on:click={loadallImages2}>alles laden!</button>
 <button on:click={saveallImages2}>alles Speichern!</button>
@@ -145,9 +169,16 @@ export function saveallImages2(){
 
 <br>brrrrrrrr
 {#each ($allImages || []) as oneimage, i}
+<div  style="display:inline-block"  on:dblclick={() => showfull(i)}>
   <SingleImage imageid={i} rwidth={rangewidth}></SingleImage>
-    
+</div>
 {/each}
+
+<Modal bind:active={active}>
+  <p class="image">
+    <img alt="Test image" src={$allImages[selectedImageId].pathorig}/>
+  </p>
+</Modal>
 
 <!--
 {#each (files || []) as file, i}
