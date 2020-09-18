@@ -3,7 +3,7 @@
   import {  allImages,bookdic } from './allimagesstore.js';
 
 	import VerticalList from './VerticalList.svelte';
-	import HorizontalList from './HorizontalList.svelte';
+    import HorizontalList from './HorizontalList.svelte';
 
     // import {dndzone} from 'svelte-dnd-action';
 
@@ -69,7 +69,7 @@ function generatePages(){
  <Button type="is-primary block" on:click={generatePages}>Generate Pages</Button>
 <div class="columns">
   <div class="column is-2">
-    <VerticalList items={$allImages}/> 
+    <VerticalList items={$allImages  || []}/> 
   </div>
 
   <div class="column" style="overflow: auto; max-height: 84vh;">
