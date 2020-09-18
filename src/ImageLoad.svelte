@@ -62,7 +62,7 @@ async function handleload(event){
       .toFile(thumbname)
       .then(()=> {
         // console.log("then...");
-        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0,pathorig:files[i].path}
+        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0,pathorig:files[i].path,id:i,name:"n"}
         allImages.update(arr=>{
           return [...arr,newimageentry]
         })
