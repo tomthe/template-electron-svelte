@@ -33,6 +33,9 @@ function createWindow() {
         }
         mainWindow = null;
     });
+
+    
+    mainWindow.webContents.openDevTools();
     /*
     ipcMain.on('trigger-jimp', (event, arg) => {
         for(let i=0;i<files.length;i+=1){

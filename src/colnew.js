@@ -3,27 +3,41 @@
 // Sketch Collage:
 //////////////////////////////
 
-	var frameColor = [4 , 4, 4];
-	var frameWidth = 2;
+	let frameColor = [4 , 4, 4];
+	let frameWidth = 2;
 
-export let col = function(cwidth,cheight) {
-	
+export class col {
+	constructor(imList, inputratio, allimages){
+        this.imList=imList;
+        this.inputratio = inputratio;
+        this.allimages= allimages;
+
+
 	//options for collage-creation:
-	var nImagesPerCollage=9;
-	var option_maxRatioFit = 1.04;
-	var option_maxrrm = 0.33;
+	this.nImagesPerCollage=9;
+	this.option_maxRatioFit = 1.08;
+	this.option_maxrrm = 2;
 
-	var maxTries = 600;
-	var rrm = 22;
+	this.maxTries = 280;
+	this.rrm = 22;
 
 
 	// global variables:
-	var mainPair;
+	this.mainPair;
 
-	var imList = [];
+    //output? object, that defines the positions of every image:
+    this.pg =[];
+    this.width=100;
+    this.height=100*inputratio;
+    }
 
-    regenerate = function(){
-        if(imList.length>0){
+     getpg(){
+        console.log("colnew getpg:", this.pg)
+        return this.pg;
+    }
+
+     regenerate (){
+        if(this.imList.length>0){
             generate_1_collage_and_save_if_good()
         }
     }
@@ -31,56 +45,63 @@ export let col = function(cwidth,cheight) {
 
     /*
     p.drawHighResolution = function() {
-        var hiwidth=3000
-        var hiheight = hiwidth * p.height/p.width;
+        let hiwidth=3000
+        let hiheight = hiwidth * p.height/p.width;
         
-        var pg = p.createGraphics(hiwidth, hiheight);
-        var rrm = mainPair.draw(p.createVector(0,0),p.createVector(hiwidth,hiheight),true,pg,p);
+        let pg = p.createGraphics(hiwidth, hiheight);
+        let rrm = mainPair.draw(p.createVector(0,0),p.createVector(hiwidth,hiheight),true,pg,p);
         //zipPGraphic(pg);
         p.save(pg,'collage.jpg');
     }*/
 
 
-	function start_and_add_pics_to_collage(){
-		var ipic =0;
-		mainPair = new ImPair(imList[0],allimages[imList[0]].ratio);
-		while (ipic <imList.length-1) {
-			ipic++;
-            mainPair.addPic(imList[ipic],allimages[imList[ipic]].ratio);
+	start_and_add_pics_to_collage(imList){
+		let ipic =0;
+		this.mainPair = new ImPair(this.allimages[this.imList[0]].ratioorig,this.imList[0]);
+		while (ipic <this.imList.length-1) {
+            ipic++;
+            //console.log("add_pics to collage, ipic:",ipic,this.allimages[this.imList[ipic]].ratioorig,this.imList[ipic]);
+            this.mainPair.addPic(this.allimages[this.imList[ipic]].ratioorig,this.imList[ipic]);
 		}
 	}
 
-	generate_1_collage_and_save_if_good = function(){
+	generate_1_collage_and_save_if_good (){
+        let imList= this.imList;
+        let inputratio = this.inputratio;
 	  console.log('generate_1_collage_and save if good.....!',imList.length); //, i_pic_in_folder_start, number_of_pics);
       if (imList.length <1){
           console.log("no images in this sketch!")
           return;
       }
       
-	  var i_tries=0;
-	  var i_good=0;
+	  let i_tries=0;
+	  let i_good=0;
 
-	  var option_maxRatioFit_temp = option_maxRatioFit;
-	  var option_maxrrm_temp = option_maxrrm;
+	  let option_maxRatioFit_temp = this.option_maxRatioFit;
+	  let option_maxrrm_temp = this.option_maxrrm;
 
-	  startTime = performance.now();
-	  while(i_tries<maxTries && i_good < 1){
+	  let startTime = performance.now();
+	  while(i_tries<this.maxTries && i_good < 1){
+        //console.log(i_tries,"generate a new try, ")
 		i_tries++;
-		start_and_add_pics_to_collage();
-		var ratioFit = getRatioFit();
-		var perfTimePerCol = (performance.now()- startTime) /i_tries
+		this.start_and_add_pics_to_collage();
+		let ratioFit = this.getRatioFit();
+		let perfTimePerCol = (performance.now()- startTime) /i_tries
 		if (perfTimePerCol>4){
 			//option_maxRatioFit = 1 + perfTimePerCol / 5;
 		}
-		console.log("try Number", i_tries,"| rrm: ", rrm, '| RatioFit: ', ratioFit, "performance: ", performance.now()-startTime, perfTimePerCol,option_maxRatioFit);
+		console.log("try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, "performance: ", "input-ratio:",this.inputratio,performance.now()-startTime, perfTimePerCol,this.option_maxRatioFit, this.pg);
 		if(ratioFit<option_maxRatioFit_temp){
-          pg = 
-		  rrm = mainPair.draw(createVector(0,0),createVector(width,height),false,p,p);
-		  console.log("try Number", i_tries,"| rrm: ", rrm, '| RatioFit: ', ratioFit);
-		  if(rrm<option_maxrrm_temp){
+          //pg = 
+          this.pg=[];
+		  this.rrm = this.mainPair.draw(createVector(0,0),createVector(this.width,this.height),this.pg);
+		  console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', this.ratioFit,this.pg);
+		  if(this.rrm<option_maxrrm_temp){
 			i_good++;
-			p.background(frameColor);
-			rrm = mainPair.draw(p.createVector(0,0),p.createVector(p.width,p.height),true,p,p);
+            //p.background(frameColor);
+            this.pg=[];
+            this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*100,100),this.pg);
+            break;
 			//save("page" +round(rrm*1000)/1000 + "rf" + round(ratioFit*1000)/1000 +".jpg");
 			
 			//mainPair.saveToDisk(outputPath + "v1/page" +i_pic_in_folder_start + "rrm"+rrm + "rf" + ratioFit + ".data");
@@ -90,12 +111,14 @@ export let col = function(cwidth,cheight) {
 			option_maxrrm_temp *= 1.01;
 		}
 	  }
-	  console.log("done!!!" + "; " + i_tries + "; ");
+      console.log("done!!!" + "; " + i_tries + "; ",this.pg);
+      return this.pg;
 	}
 
-	function getRatioFit(){
-	  var r = mainPair.getRatio();
-	  return Math.max(r/(p.width/p.height), ((p.width)/p.height)/r);
+	getRatioFit(){
+      let r = this.mainPair.getRatio();
+      console.log("getratiofit", r)
+	  return Math.max(r/this.inputratio, this.inputratio/r);
 	}
 
 
@@ -103,7 +126,7 @@ export let col = function(cwidth,cheight) {
 	
 }
 
-//var p5col = new p5(col, 'c3');
+//let p5col = new p5(col, 'c3');
 
 /*
 
@@ -144,9 +167,9 @@ class ColImg {
     drawImgBig(){
         background(0);
         //console.log( img,fn,mpos, mouseX, mouseY);
-        var ri = width / height; //canvas-width
-        var rs = this.width / this.height;
-        var left, right,top,bottom;
+        let ri = width / height; //canvas-width
+        let rs = this.width / this.height;
+        let left, right,top,bottom;
         if(ri > rs){
             //das fenster ist breiter als das bild: räner an den seiten
             left  = 0.5 * width - 0.5 * width * rs / ri;
@@ -194,6 +217,9 @@ class ImPair {
     constructor(ratio,fn){
         this.ratio=ratio;
         this.fn=fn;
+        this.nIm=1; //anzahl der bilder hier drin und tiefer?
+        this.im1;
+        this.im2;
     }
     /*
     constructor(im, fn){
@@ -224,8 +250,8 @@ class ImPair {
  
  
     getRatio(){
-        if(this.nIm==1){
-            return Math.round(this.img.width)/this.img.height;
+        if(this.nIm<=2){
+            return this.ratio;
         } else {
             if(this.isNebeneinander){
                 return this.im1.getRatio() + this.im2.getRatio();
@@ -235,9 +261,9 @@ class ImPair {
         }
     }
     getGoodness(size){
-        var ris = Math.round(100*size.x/size.y)/100.0;
-        //var rdif = round(100*ris/ratio)/100.0;
-        var rm = Math.max(ris/this.ratio, this.ratio/ris);
+        let ris = Math.round(100*size.x/size.y)/100.0;
+        //let rdif = round(100*ris/ratio)/100.0;
+        let rm = Math.max(ris/this.ratio, this.ratio/ris);
         return rm;
     }
  
@@ -256,18 +282,19 @@ class ImPair {
  
     addPic(ratio,fn){
         this.nIm++;
+        //console.log("addPic, ",this.nIm,ratio,fn,this);
         if(this.nIm<=2){  //(Math.random()<0.5){
             return this.addPicReplace(ratio,fn);
         } else {
             if(Math.random(1)<0.5){
-            return this.im1.addPic(ratio,fn);
+              return this.im1.addPic(ratio,fn);
             } else{
-            return this.im2.addPic(ratio,fn);
+              return this.im2.addPic(ratio,fn);
             }
         }
     }
  
-    addPicReplace(ratio){
+    addPicReplace(ratio,fn){
         if(Math.random(1)<0.5){
             this.im1 = new ImPair(this.ratio,this.fn);
             this.im2 = new ImPair(ratio,fn);
@@ -288,7 +315,7 @@ class ImPair {
  
     //draw(pos, size, reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback){
     draw(pos,size,pg){
-        var rm=0;
+        let rm=0;
         if(this.nIm==1) {
             let reallyDraw=true;
             if(reallyDraw){
@@ -306,26 +333,28 @@ class ImPair {
                 }
             }*/
             // this.strPosInfo += "\n " + pos.x + "; " + pos.y + "; " + size.x + "; "+ size.y + "; " + this.filename;
-            var ris = size.x/size.y;
-            rm = size.x * size.y * (Math.max(ris/this.ratio, this.ratio/ris)-1) / (pg.width * pg.height);
+            let ris = size.x/size.y;
+            //console.log("inside draw", this.ratio,this.width,this.height,ris,size,pos)
+            rm = (Math.max(ris/this.ratio, this.ratio/ris)-1) // (this.width * this.height) * size.x * size.y * 
 
         } else {
             if(this.isNebeneinander){
-                var pos1 = {x:pos.x,y:pos.y};
-                var size1 = {x:size.x * this.getSplit(),y:size.y};
-                rm += this.im1.draw(pos1,size1,reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback);
-                var pos2 = {x:pos.x+size.x * this.getSplit(),y:pos.y};
-                var size2 = createVector(size.x * (1-this.getSplit()),size.y);
-                rm += this.im2.draw(pos2,size2,reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback);
+                let pos1 = {x:pos.x,y:pos.y};
+                let size1 = {x:size.x * this.getSplit(),y:size.y};
+                rm += this.im1.draw(pos1,size1, pg);
+                let pos2 = {x:pos.x+size.x * this.getSplit(),y:pos.y};
+                let size2 = createVector(size.x * (1-this.getSplit()),size.y);
+                rm += this.im2.draw(pos2,size2, pg);
             } else {
-                var pos1 = createVector(pos.x,pos.y,size.x);
-                var size1 = createVector(size.x,size.y * this.getSplit());
-                rm += this.im1.draw(pos1,size1,reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback);
-                var pos2 = createVector(pos.x,pos.y + size.y * this.getSplit());
-                var size2 = createVector(size.x,size.y * (1-this.getSplit()));
-                rm += this.im2.draw(pos2,size2,reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback);
+                let pos1 = createVector(pos.x,pos.y,size.x);
+                let size1 = createVector(size.x,size.y * this.getSplit());
+                rm += this.im1.draw(pos1,size1, pg);
+                let pos2 = createVector(pos.x,pos.y + size.y * this.getSplit());
+                let size2 = createVector(size.x,size.y * (1-this.getSplit()));
+                rm += this.im2.draw(pos2,size2, pg);
             }
         }
+        //console.log("draw.. rm: ", rm)
         return rm;
     }
 
@@ -333,21 +362,22 @@ class ImPair {
     drawImgSmall(pos, size,pg){
         this.pos = pos;
         this.size = size;
-        var ri = size.x/size.y; //r_container
-        var rs = this.img.width / this.img.height; //r_filler
-        var sleft, sright,stop,sbottom;
+        let ri = size.x/size.y; //r_container
+        let rs = this.ratio; //r_filler
+        let sleft, sright,stop,sbottom;
+        let img = {width: 100,height:100/this.ratio} //todo: this is a hack
         if(ri > rs){
             //das fenster ist breiter als das bild: obenunten abschneiden
             sleft  = 0; //0.5 * width - 0.5 * width * rs / ri;
-            sright = this.img.width;//0.5 * width + 0.5 * width * rs / ri; //    #0.5 * im1.size[0] * (1+rs/ri)
-            stop = 0.5* this.img.height - 0.5 * this.img.height * rs/ri;
-            sbottom = 0.5* this.img.height + 0.5 * this.img.height * rs/ri;
+            sright = img.width;//0.5 * width + 0.5 * width * rs / ri; //    #0.5 * im1.size[0] * (1+rs/ri)
+            stop = 0.5* img.height - 0.5 * img.height * rs/ri;
+            sbottom = 0.5* img.height + 0.5 * img.height * rs/ri;
         } else {
             //filler ist breiter als container: seiten abschneiden:.
-                sleft = 0.5*this.img.width - 0.5 * this.img.width*ri/rs;
-                sright = 0.5*this.img.width + 0.5 * this.img.width*ri/rs;
+                sleft = 0.5*img.width - 0.5 * img.width*ri/rs;
+                sright = 0.5*img.width + 0.5 * img.width*ri/rs;
                 stop = 0;   //    # 0.5*im1.size[1] * (1-ri/rs)
-                sbottom = this.img.height;// 0.5 * height + 0.5 * height * ri/rs ; //     #0.5 * im1.size[0] * (1+ri/rs)
+                sbottom = img.height;// 0.5 * height + 0.5 * height * ri/rs ; //     #0.5 * im1.size[0] * (1+ri/rs)
             //das fenster ist schmaler als das anzuzeigende bild: schwarze ränder  oben und unten
         }
         let frameWidth=0;
