@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 
 export const allImages = writable([]);
 export const bookdic = writable([]);
+export const options = writable({});
 
  
 
