@@ -15,7 +15,6 @@
 
 	export let name;
 	export let files = []
-  export let sfiles =[]
   let selectedImageId;
   let active=false;
 
@@ -58,17 +57,26 @@ async function handleload(event){
     //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
     let thumbname = 'C:\\dev\\svelte\\test\\o' + generateHash(files[i].path) + 'g3.jpg'
     sharp(files[i].path)
-      .resize(300)
-      .toFile(thumbname)
-      .then(()=> {
-        // console.log("then...");
-        let nextid = $allImages.length
-        newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0,pathorig:files[i].path,id:nextid,name:"n"}
-        allImages.update(arr=>{
-          return [...arr,newimageentry]
-        })
-      }
-      );
+      .metadata()
+      .then((metadata)=> {
+        sharp(files[i].path)
+        
+        .resize(300)
+        .toFile(thumbname)
+        .then(()=> {
+          let nextid = $allImages.length
+          let rorig=metadata.width/metadata.height;
+          newimageentry = {fnorig:files[i],fnsmall:thumbname,rating:0,pathorig:files[i].path,id:nextid,name:"n",
+          worig:metadata.width,horig:metadata.height,rorig:rorig,
+          wsmall:300,hsmall:300/rorig}
+          
+          // console.log("brrrrr", metadata, newimageentry) 
+          allImages.update(arr=>{
+            return [...arr,newimageentry]
+          })
+        }
+        );
+      })
     	// Read the image.
     //const image = await Jimp.read(files[i].path);
 
@@ -86,9 +94,7 @@ sharp(files[i].path)
     // containing a scaled and cropped version of input.jpg
   });*/
 
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",thumbname);
-    sfiles.push(window.URL.createObjectURL(files[i]));
-    sfiles = sfiles;
+    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",thumbname);
     files = files;
         const rect = new fabric.Rect({
         left: 40,
@@ -99,7 +105,7 @@ sharp(files[i].path)
     });
     canv.add(rect);
   }
-  console.log(sfiles)
+  console.log($allImages)
 }
 
 function loadallImages2(){

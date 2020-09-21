@@ -1,9 +1,10 @@
 <script>
   import { Button, Modal } from 'svelma';
   import {  allImages,bookdic } from './allimagesstore.js';
+  import  Collage  from './Collage.svelte';
 
 	import VerticalList from './VerticalList.svelte';
-    import HorizontalList from './HorizontalList.svelte';
+  import HorizontalList from './HorizontalList.svelte';
 
     // import {dndzone} from 'svelte-dnd-action';
 
@@ -34,8 +35,14 @@ function generatePages(){
         }
 
     }
-    $bookdic.push(page)  
+    if(page.elements.length > 0){
+      $bookdic.push(page)
+    }  
     $bookdic = $bookdic;
+}
+
+function addPage(){
+    $bookdic.push({elements:[]})
 }
 </script>
 
@@ -76,6 +83,7 @@ function generatePages(){
   {#each ($bookdic || []) as onepage, i}
 
     <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px"/>
+    <Collage rati={1.05} elements={onepage.elements}></Collage>
 <!-- 
     {#each (onepage.elements || []) as element, i}
         <div>{element.id}.-.-.</div>
@@ -84,6 +92,7 @@ function generatePages(){
   </div>
 </div>
 
+ <Button type="is-primary block" on:click={addPage}>Add Page</Button>
 
 <!-- {#each ($bookdic || []) as onepage, i}
 <section use:dndzone={onepage.elements} on:consider={handleSort} on:finalize={handleSort}>

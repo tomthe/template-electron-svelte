@@ -1,34 +1,42 @@
 
 //////////////////////////////
 // Sketch Collage:
+// 
+// input: some images, collage-ratio;  output: a collage
+// input: entweder eine liste für jede eigenschaft: list of ids, list of ratios; oder eine liste mit allem: [{id:4,ratio:1.4},{...}]
+//  * imLi=[23,4,24]     raLi=[0.75,1.0,1.5]
+// 
+// output:
+//  * list of elements [{id:4, x:0.0,y:0.55,w:,h,xcrop:ycrop,wcrop:hcrop:,type:'im'},...] 
+// 
 //////////////////////////////
 
 	let frameColor = [4 , 4, 4];
 	let frameWidth = 2;
 
 export class col {
-	constructor(imList, inputratio, allimages){
-        this.imList=imList;
+	constructor(idList, ratioList, inputratio){
+        this.idList=idList;
         this.inputratio = inputratio;
-        this.allimages= allimages;
+        this.ratioList= ratioList;
 
 
-	//options for collage-creation:
-	this.nImagesPerCollage=9;
-	this.option_maxRatioFit = 1.08;
-	this.option_maxrrm = 2;
+        //options for collage-creation:
+        this.nImagesPerCollage=9;
+        this.option_maxRatioFit = 1.08;
+        this.option_maxrrm = 2;
 
-	this.maxTries = 280;
-	this.rrm = 22;
+        this.maxTries = 280;
+        this.rrm = 22;
 
 
-	// global variables:
-	this.mainPair;
+        // global variables:
+        this.mainPair;
 
-    //output? object, that defines the positions of every image:
-    this.pg =[];
-    this.width=100;
-    this.height=100*inputratio;
+        //output? object, that defines the positions of every image:
+        this.pg =[];
+        this.width=1.0;
+        this.height=1.0*inputratio;
     }
 
      getpg(){
@@ -37,7 +45,7 @@ export class col {
     }
 
      regenerate (){
-        if(this.imList.length>0){
+        if(this.idList.length>0){
             generate_1_collage_and_save_if_good()
         }
     }
@@ -55,21 +63,20 @@ export class col {
     }*/
 
 
-	start_and_add_pics_to_collage(imList){
+	start_and_add_pics_to_collage(){
 		let ipic =0;
-		this.mainPair = new ImPair(this.allimages[this.imList[0]].ratioorig,this.imList[0]);
-		while (ipic <this.imList.length-1) {
+		this.mainPair = new ImPair(this.ratioList[0],this.idList[0]);
+		while (ipic <this.idList.length-1) {
             ipic++;
             //console.log("add_pics to collage, ipic:",ipic,this.allimages[this.imList[ipic]].ratioorig,this.imList[ipic]);
-            this.mainPair.addPic(this.allimages[this.imList[ipic]].ratioorig,this.imList[ipic]);
+            this.mainPair.addPic(this.ratioList[ipic],this.idList[ipic]);
 		}
 	}
 
 	generate_1_collage_and_save_if_good (){
-        let imList= this.imList;
-        let inputratio = this.inputratio;
-	  console.log('generate_1_collage_and save if good.....!',imList.length); //, i_pic_in_folder_start, number_of_pics);
-      if (imList.length <1){
+      let inputratio = this.inputratio;
+	  console.log('generate_1_collage_and save if good.....!',this.idList.length); //, i_pic_in_folder_start, number_of_pics);
+      if (this.idList.length <1){
           console.log("no images in this sketch!")
           return;
       }
@@ -82,7 +89,7 @@ export class col {
 
 	  let startTime = performance.now();
 	  while(i_tries<this.maxTries && i_good < 1){
-        //console.log(i_tries,"generate a new try, ")
+        console.log(i_tries,"generate a new try, ")
 		i_tries++;
 		this.start_and_add_pics_to_collage();
 		let ratioFit = this.getRatioFit();
@@ -100,7 +107,7 @@ export class col {
 			i_good++;
             //p.background(frameColor);
             this.pg=[];
-            this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*100,100),this.pg);
+            this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*1.0,1.0),this.pg);
             break;
 			//save("page" +round(rrm*1000)/1000 + "rf" + round(ratioFit*1000)/1000 +".jpg");
 			
@@ -214,9 +221,9 @@ class ColImg {
 
 class ImPair {
 
-    constructor(ratio,fn){
+    constructor(ratio,imid){
         this.ratio=ratio;
-        this.fn=fn;
+        this.imid=imid;
         this.nIm=1; //anzahl der bilder hier drin und tiefer?
         this.im1;
         this.im2;
@@ -261,7 +268,7 @@ class ImPair {
         }
     }
     getGoodness(size){
-        let ris = Math.round(100*size.x/size.y)/100.0;
+        let ris = Math.round(1.0*size.x/size.y)/1.0;
         //let rdif = round(100*ris/ratio)/100.0;
         let rm = Math.max(ris/this.ratio, this.ratio/ris);
         return rm;
@@ -280,27 +287,27 @@ class ImPair {
     }
  
  
-    addPic(ratio,fn){
+    addPic(ratio,imid){
         this.nIm++;
-        //console.log("addPic, ",this.nIm,ratio,fn,this);
+        //console.log("addPic, ",this.nIm,ratio,imid,this);
         if(this.nIm<=2){  //(Math.random()<0.5){
-            return this.addPicReplace(ratio,fn);
+            return this.addPicReplace(ratio,imid);
         } else {
             if(Math.random(1)<0.5){
-              return this.im1.addPic(ratio,fn);
+              return this.im1.addPic(ratio,imid);
             } else{
-              return this.im2.addPic(ratio,fn);
+              return this.im2.addPic(ratio,imid);
             }
         }
     }
  
-    addPicReplace(ratio,fn){
+    addPicReplace(ratio,imid){
         if(Math.random(1)<0.5){
-            this.im1 = new ImPair(this.ratio,this.fn);
-            this.im2 = new ImPair(ratio,fn);
+            this.im1 = new ImPair(this.ratio,this.imid);
+            this.im2 = new ImPair(ratio,imid);
         } else {
-            this.im1 = new ImPair(ratio,fn);
-            this.im2 = new ImPair(this.ratio,this.fn);
+            this.im1 = new ImPair(ratio,imid);
+            this.im2 = new ImPair(this.ratio,this.imid);
         }
 
         if(Math.random(1)<0.5){
@@ -320,7 +327,7 @@ class ImPair {
             let reallyDraw=true;
             if(reallyDraw){
                 this.drawImgSmall(pos,size,pg);
-                //pg.push({fn:this.fn,pos:pos,size:size});
+                //pg.push({imid:this.imid,pos:pos,size:size});
             }
             /*
             if(getImgAtPosition){
@@ -365,7 +372,7 @@ class ImPair {
         let ri = size.x/size.y; //r_container
         let rs = this.ratio; //r_filler
         let sleft, sright,stop,sbottom;
-        let img = {width: 100,height:100/this.ratio} //todo: this is a hack
+        let img = {width: 1.0,height:1.0/this.ratio} //todo: this is a hack
         if(ri > rs){
             //das fenster ist breiter als das bild: obenunten abschneiden
             sleft  = 0; //0.5 * width - 0.5 * width * rs / ri;
@@ -388,7 +395,7 @@ class ImPair {
         } else {
             //image(this.img,pos.x,pos.y,size.x,size.y);
             //pg.image(this.img,pos.x,pos.y,size.x,size.y,sleft,stop,sright-sleft,sbottom-stop); 
-            pg.push({fn:this.fn,outerx:pos.x,outery:pos.y,outerw:size.x,outerh:size.y,innerx:sleft,innery:stop,innerw:sright,innerh:sbottom})
+            pg.push({imid:this.imid,outerx:pos.x,outery:pos.y,outerw:size.x,outerh:size.y,innerx:sleft,innery:stop,innerw:sright,innerh:sbottom})
         }      
     }
 }
