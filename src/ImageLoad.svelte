@@ -13,7 +13,7 @@
   
   // const { ipcRenderer } = require('electron');
 
-	export let name;
+	// export let name;
 	export let files = []
   let selectedImageId;
   let active=false;

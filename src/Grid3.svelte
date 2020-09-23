@@ -38,6 +38,6 @@ let items = [
 
 <h1>Static</h1>
 
-<Grid {items} bind:items={items} cols={30} let:item={item} rowHeight={20}>
+<Grid {items} cols={30} let:item={item} rowHeight={20}>
 	<div class=content style="background: {item.static ? '#cce' : '#ccc'};border:1px solid black;">{item.id}</div>
 </Grid>
