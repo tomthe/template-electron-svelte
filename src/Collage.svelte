@@ -3,6 +3,11 @@
   import { onMount } from 'svelte';
   import { allImages } from './allimagesstore.js';
   import {col} from './colnew.js';
+  import Grid2 from './Grid2.svelte'
+  import Grid1 from './Grid1.svelte'
+  import Grid3 from './Grid3.svelte'
+  // import Grid from "svelte-grid";
+  import gridHelp from "svelte-grid/build/helper";
 
   import Moveable from "svelte-moveable";
   let target;
@@ -15,12 +20,18 @@
   export let elements = [];
   export let ratiocollage=1.0;
 
+  
+  let griditems = []
+  let gridresolution = 10;
+  let gridsize = 600;
+
   //let can;
   let canvas;
   let canv;
   let col1;
 
   onMount(() => {
+
     canv = new fabric.Canvas(canvas);
 
     const rect = new fabric.Rect({
@@ -61,6 +72,8 @@ function generatecollage(ratio){
 
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
+  griditems = createGrid(colpg);
+
   for(let i=0;i<colpg.length;i+=1){
     console.log("add pic to collage in fabric:", i,colpg[i],$allImages[colpg[i].imid].fnsmall)
     let fn = $allImages[colpg[i].imid].fnsmall
@@ -102,6 +115,7 @@ function generatecollage(ratio){
         // }),
         canv.add(oImg);
     });
+
    /* const rect = new fabric.Rect({
       left: colpg[i].outerx,
       top: colpg[i].outery,
@@ -113,6 +127,25 @@ function generatecollage(ratio){
     */
   }
   //
+  
+    function createGrid(colpg){
+      let griditems = []
+      let gridresolution = 10;
+      let wgrid = 600;
+      let hgrid = 600;
+      for(let i=0;i<colpg.length;i+=1){
+        griditems.push(gridHelp.item({
+          x:colpg[i].outerx*wgrid/gridresolution,
+          y:colpg[i].outery*hgrid/gridresolution,
+          w:colpg[i].outerw*wgrid/gridresolution,
+          h:colpg[i].outerh*hgrid/gridresolution,
+          bla:"kamuni",
+          id:colpg[i].imid
+          }))
+      }
+      console.log("griditems:",griditems)
+      return griditems;
+    }
 
 }
 
@@ -123,6 +156,12 @@ function generatecollage(ratio){
 
 <button on:click={generatecollage}>generate a Collage!</button>
 
+
+<Grid2 colitems={griditems}></Grid2>
+<h3>treennerrr!</h3>
+<Grid1></Grid1>
+<h3>treennerrr!</h3>
+<Grid3></Grid3>
  <!-- <div class="target" bind:this={target}>Target</div>
 <Moveable
   target={target}
@@ -133,10 +172,10 @@ function generatecollage(ratio){
 /> -->
 
 <style>
-	#rcorners1 {
+	/* #rcorners1 {
 		border-radius: 3px;
 		background: #73AD21;
 		border:2px;
 		height: 100px;
-	}
+	} */
 </style>

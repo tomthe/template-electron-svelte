@@ -18,7 +18,7 @@
 
 <Grid {items2} bind:items={items2} cols={4} let:item rowHeight={100}>
   <div class="content" style="background: #ccc; border: 3px solid black; overflow:hidden;">	
-          <img src="https://source.unsplash.com/5VXH4RG88gc" alt="alter!" />
+          <img src="C:/dev/svelte/test/o575807646g3.jpg" alt="alter!" />
 	</div>
 </Grid>
 <script>

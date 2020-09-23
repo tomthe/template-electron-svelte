@@ -217,7 +217,7 @@ function generateHash(inputstr){
 
 
 <style>
-	main {
+	/* main {
 		text-align: center;
 		padding: 1em;
 		max-width: 240px;
@@ -227,5 +227,5 @@ function generateHash(inputstr){
 		main {
 			max-width: none;
 		}
-	}
+	} */
 </style>
