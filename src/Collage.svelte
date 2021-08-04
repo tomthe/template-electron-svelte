@@ -159,9 +159,9 @@ function generatecollage(ratio){
 
 <Grid2 colitems={griditems}></Grid2>
 <h3>treennerrr!</h3>
-<Grid1></Grid1>
+<!--<Grid1></Grid1>
 <h3>treennerrr!</h3>
-<Grid3></Grid3>
+<Grid3></Grid3>-->
  <!-- <div class="target" bind:this={target}>Target</div>
 <Moveable
   target={target}

@@ -2,6 +2,7 @@
   import { Button, Modal } from 'svelma';
   import {  allImages,bookdic } from './allimagesstore.js';
   import  Collage  from './Collage.svelte';
+  import Movi from './Movi.svelte';
 
 	import VerticalList from './VerticalList.svelte';
   import HorizontalList from './HorizontalList.svelte';
@@ -91,7 +92,10 @@ function addPage(){
   {/each}
   </div>
 </div>
-
+<br>
+<Movi>
+</Movi>
+blblblb
  <Button type="is-primary block" on:click={addPage}>Add Page</Button>
 
 <!-- {#each ($bookdic || []) as onepage, i}

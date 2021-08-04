@@ -8,11 +8,11 @@
     align-items: center;
     font-size: large;
   }
-  :global(.svlt-grid-shadow) {
-    background: pink;
+  .svlt-grid-shadow {
+    background: blue;
   }
-  :global(.svlt-grid-container) {
-    background: #eee;
+  .svlt-grid-container {
+    background: #eae;
   }
 </style>
 

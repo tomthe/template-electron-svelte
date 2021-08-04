@@ -8,11 +8,11 @@
   align-items: center;
   font-size: large;
 }
-:global(.svlt-grid-shadow) {
+.svlt-grid-shadow {
   background: pink;
 }
-:global(.svlt-grid-container) {
-  background: #eee;
+.svlt-grid-container {
+  background: #ee0;
 }
 </style>
 
@@ -35,9 +35,10 @@ let items = [
 
 </script>
 
-
+<div style="width:300px; height:400px;">
 <h1>Static</h1>
 
-<Grid {items} cols={30} let:item={item} rowHeight={20}>
+<Grid {items} cols={10} let:item={item} rowHeight={20}>
 	<div class=content style="background: {item.static ? '#cce' : '#ccc'};border:1px solid black;">{item.id}</div>
 </Grid>
+</div>

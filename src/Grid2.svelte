@@ -8,15 +8,21 @@
   align-items: center;
   font-size: large;
 }
-:global(.svlt-grid-shadow) {
+.cover {
+  object-fit: cover;
+  width: 50px;
+  height: 100px;
+}
+svlt-grid-shadow {
   background: pink;
 }
-:global(.svlt-grid-container) {
-  background: #eee;
+.svlt-grid-container {
+  background: #eea;
 }
 </style>
 
 <script>
+import { allImages } from './allimagesstore.js';
 import Grid from "svelte-grid";
 import gridHelp from "svelte-grid/build/helper";
 
@@ -34,7 +40,11 @@ const id = () =>
 
 
 <h1>Static</h1>
-
+<div class="svelte-grid-container">
 <Grid {colitems} bind:items={colitems} cols={60} let:item={item} rowHeight={10}>
-	<div class=content style="background: {item.static ? '#cce' : '#ccc'};border:1px solid black;">{item.id}</div>
+	<div class=content style="background: {item.static ? '#cce' : '#ccc'};border:1px solid black;">
+    {item.id}
+    <img class="cover" src={$allImages[item.id].fnsmall} alt="nope" style="object-fit: cover;"/>
+  </div>
 </Grid>
+</div>

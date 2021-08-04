@@ -1,5 +1,13 @@
 import { writable } from 'svelte/store';
 
+
+//allImages.
+// id  - 1,2,3....
+// worig,horig
+// wsmall, hsmall
+// rating
+// fnsmall
+// pathorig
 export const allImages = writable([]);
 export const bookdic = writable([]);
 export const options = writable({});
