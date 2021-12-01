@@ -72,18 +72,49 @@ function generatecollage(ratio){
 
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
+  let widthcollage = Math.min(600,600/ratiocollage);
+  //canv.fill("#fff")
+  let borderthickness = 0.004;
+  const rect = new fabric.Rect({
+      left: 0,
+      top: 0,
+      selectable: false,
+      width: widthcollage * ratiocollage,
+      height: widthcollage,
+      fill: "black"
+    });
+  canv.add(rect);
   griditems = createGrid(colpg);
 
   for(let i=0;i<colpg.length;i+=1){
     console.log("add pic to collage in fabric:", i,colpg[i],$allImages[colpg[i].imid].fnsmall)
     let fn = $allImages[colpg[i].imid].fnsmall
     fabric.Image.fromURL(fn, function(oImg) {
-        let widthcollage = Math.min(600,600/ratiocollage);
         let scale = colpg[i].innerw / $allImages[colpg[i].imid].wsmall 
-        if (colpg[i].outerw/colpg[i].outerh > $allImages[colpg[i].imid].wsmall/$allImages[colpg[i].imid].hsmall){  
+        let xgap = 0;//
+        let ygap = 0;
+        let orig_image_ratio = $allImages[colpg[i].imid].wsmall/$allImages[colpg[i].imid].hsmall;
+        let place_image_ratio = colpg[i].outerw/colpg[i].outerh;
+        console.log("image ratios: ",place_image_ratio ,orig_image_ratio)
+        if (place_image_ratio > orig_image_ratio){  //wenn ratio_platz > ratio_thumb
+          // image scale is determined by its width:
+          //scale: how much has the image to be scaled to fit?
           scale = colpg[i].outerw/1.0 * widthcollage / $allImages[colpg[i].imid].wsmall
+          //ygap: wie viel das thumb "übersteht".../2
+          //wie bekomme ich das raus?
+          ygap= ($allImages[colpg[i].imid].hsmall * scale) - (colpg[i].outerh/1.0 * widthcollage)//orig_image_height - place_image_height 
+          console.log("ygap absolute:: ",ygap)
+          ygap = ((place_image_ratio/orig_image_ratio) * colpg[i].outerh/1.0)-colpg[i].outerh; // 1/0.5 - 1
+          console.log("ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
+          // ygap=5
         } else {
+          console.log("xxxx?")
           scale = colpg[i].outerh/1.0 * widthcollage / $allImages[colpg[i].imid].hsmall
+          
+          xgap = ((orig_image_ratio/place_image_ratio) * colpg[i].outerw)-colpg[i].outerw; // 1/0.5 - 1
+          console.log("xgap ratio/ratio:: ",xgap)
+          // xgap=0
+          // ygap = zugross/2
         }
         
          oImg.scale(scale)
@@ -100,19 +131,21 @@ function generatecollage(ratio){
         //oImg.scaleToWidth(scalewidth);
         //console.log("scale to this width: ", scalewidth)
         //oImg.scale(1.)
-        oImg.left = colpg[i].outerx / 1.0 * widthcollage; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
-        oImg.top = colpg[i].outery /1.0 * widthcollage;
-        //oImg.width = colpg[i].outerw/ 100 * widthcollage * $ratio; //colpg[i].outerw
-        //oImg.height = colpg[i].outerh/ 100 * widthcollage;//$allImages[colpg[i].fn].heightsmall //100/100 / $ratio * widthcollage;//colpg[i].outerh 
-        // oImg.clipPath= new fabric.Rect({
-        //   width:colpg[i].outerw/1.0*widthcollage,
-        //   height:colpg[i].outerh/1.0*widthcollage,//colpg[i].outerh,
-        //   top:colpg[i].outery / 1.0 * widthcollage,
-        //   left:colpg[i].outerx / 1.0 * widthcollage,
-        //   //originX: 'center',
-        //   //originY: 'center'
-        //   absolutePositioned: true
-        // }),
+        oImg.left = (colpg[i].outerx - xgap/1)/ 1.0 * widthcollage; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
+        oImg.top = (colpg[i].outery - ygap/2) /1.0 * widthcollage;
+        // oImg.width = colpg[i].outerw/ 100 * widthcollage * $ratio; //colpg[i].outerw
+        // oImg.height = colpg[i].outerh/ 100 * widthcollage;//$allImages[colpg[i].fn].heightsmall //100/100 / $ratio * widthcollage;//colpg[i].outerh 
+        
+        let bt = borderthickness;
+        oImg.clipPath= new fabric.Rect({
+          width: (colpg[i].outerw - 2*bt)/1.0*widthcollage,
+          height:(colpg[i].outerh - 2*bt)/1.0*widthcollage,//colpg[i].outerh,
+          top:(colpg[i].outery +  bt)/ 1.0 * widthcollage,
+          left:(colpg[i].outerx + bt)/ 1.0 * widthcollage,
+          // originX: 'center',
+          // originY: 'center',
+          absolutePositioned: true
+        }),
         canv.add(oImg);
     });
 
@@ -144,6 +177,7 @@ function generatecollage(ratio){
           }))
       }
       console.log("griditems:",griditems)
+      console.log("colpg: ",colpg)
       return griditems;
     }
 
