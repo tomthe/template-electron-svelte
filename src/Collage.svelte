@@ -31,28 +31,17 @@
   let col1;
 
   onMount(() => {
-
     canv = new fabric.Canvas(canvas);
-
-    const rect = new fabric.Rect({
-      left: 10,
-      top: 10,
-      width: 20,
-      height: 15,
-      fill: "blue"
-    });
-    canv.add(rect);
   });
-
-	let ratio_value;
 
 	// const unsubscribe = ratio.subscribe(value => {
 	// 	ratio_value = value;
   // });
   
 
-function generatecollage(ratio){
+function generatecollage(canwidth){
   
+  canwidth=600
   //canv = new fabric.Canvas(canvas);
   console.log("generatecollage foiw3", Object.keys($allImages),elements)//, ratio, ratio_value,rati, canvas.width,canvas.height);
 
@@ -72,9 +61,10 @@ function generatecollage(ratio){
 
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
-  let widthcollage = Math.min(600,600/ratiocollage);
+  let widthcollage = Math.min(canwidth,canwidth/ratiocollage);
   //canv.fill("#fff")
-  let borderthickness = 0.004;
+  let borderthickness = 0.002;
+  // background:
   const rect = new fabric.Rect({
       left: 0,
       top: 0,
@@ -84,7 +74,7 @@ function generatecollage(ratio){
       fill: "black"
     });
   canv.add(rect);
-  griditems = createGrid(colpg);
+  // griditems = createGrid(colpg);
 
   for(let i=0;i<colpg.length;i+=1){
     console.log("add pic to collage in fabric:", i,colpg[i],$allImages[colpg[i].imid].fnsmall)
@@ -131,7 +121,7 @@ function generatecollage(ratio){
         //oImg.scaleToWidth(scalewidth);
         //console.log("scale to this width: ", scalewidth)
         //oImg.scale(1.)
-        oImg.left = (colpg[i].outerx - xgap/1)/ 1.0 * widthcollage; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
+        oImg.left = (colpg[i].outerx - xgap/2)/ 1.0 * widthcollage; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
         oImg.top = (colpg[i].outery - ygap/2) /1.0 * widthcollage;
         // oImg.width = colpg[i].outerw/ 100 * widthcollage * $ratio; //colpg[i].outerw
         // oImg.height = colpg[i].outerh/ 100 * widthcollage;//$allImages[colpg[i].fn].heightsmall //100/100 / $ratio * widthcollage;//colpg[i].outerh 
@@ -148,51 +138,45 @@ function generatecollage(ratio){
         }),
         canv.add(oImg);
     });
-
-   /* const rect = new fabric.Rect({
-      left: colpg[i].outerx,
-      top: colpg[i].outery,
-      width: colpg[i].outerw,
-      height: colpg[i].outerh,
-      fill: "red"
-    });
-    canv.add(rect);
-    */
   }
   //
   
-    function createGrid(colpg){
-      let griditems = []
-      let gridresolution = 10;
-      let wgrid = 600;
-      let hgrid = 600;
-      for(let i=0;i<colpg.length;i+=1){
-        griditems.push(gridHelp.item({
-          x:colpg[i].outerx*wgrid/gridresolution,
-          y:colpg[i].outery*hgrid/gridresolution,
-          w:colpg[i].outerw*wgrid/gridresolution,
-          h:colpg[i].outerh*hgrid/gridresolution,
-          bla:"kamuni",
-          id:colpg[i].imid
-          }))
-      }
-      console.log("griditems:",griditems)
-      console.log("colpg: ",colpg)
-      return griditems;
-    }
+    // function createGrid(colpg){
+    //   //svelte-grid...
+    //   let griditems = []
+    //   let gridresolution = 10;
+    //   let wgrid = 600;
+    //   let hgrid = 600;
+    //   for(let i=0;i<colpg.length;i+=1){
+    //     griditems.push(gridHelp.item({
+    //       x:colpg[i].outerx*wgrid/gridresolution,
+    //       y:colpg[i].outery*hgrid/gridresolution,
+    //       w:colpg[i].outerw*wgrid/gridresolution,
+    //       h:colpg[i].outerh*hgrid/gridresolution,
+    //       bla:"kamuni",
+    //       id:colpg[i].imid
+    //       }))
+    //   }
+    //   console.log("griditems:",griditems)
+    //   console.log("colpg: ",colpg)
+    //   return griditems;
+    // }
 
 }
 
+function savecollage(){
+  canv.toDataUrl()
+}
 </script>
 
-<h1>one collage:</h1>
+<button on:click={generatecollage}>(re-)generate collage!</button>
+<button on:click={savecollage}>Save collage!</button>
 <canvas bind:this={canvas} width="600" height="{600}" />
 
-<button on:click={generatecollage}>generate a Collage!</button>
 
-
+<!--
 <Grid2 colitems={griditems}></Grid2>
-<h3>treennerrr!</h3>
+<h3>treennerrr!</h3>-->
 <!--<Grid1></Grid1>
 <h3>treennerrr!</h3>
 <Grid3></Grid3>-->
