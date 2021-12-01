@@ -26,7 +26,7 @@ export class col {
         this.option_maxRatioFit = 1.08;
         this.option_maxrrm = 2;
 
-        this.maxTries = 280;
+        this.maxTries = 480;
         this.rrm = 22;
 
 

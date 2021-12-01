@@ -15,7 +15,7 @@
     }
 
 
-let imagesperpage = 3;
+let imagesperpage = 6;
 export let minrating = 1;
 export let inputratio = 1.0;
 
@@ -107,9 +107,9 @@ function addPage(){
   </div>
 </div>
 <br>
-<Movi>
+<!--<Movi>
 </Movi>
-blblblb
+blblblb-->
  <Button type="is-primary block" on:click={addPage}>Add Page</Button>
 
 <!-- {#each ($bookdic || []) as onepage, i}
