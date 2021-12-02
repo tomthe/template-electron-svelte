@@ -8,17 +8,23 @@
     export let containerWidth = '200vw';
     export let itemWidth = '10%';
 	const flipDurationMs = 300;
+	import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 	function handleDndConsider(e) {
 		items = e.detail.items;
 	}
 	function handleDndFinalize(e) {
 		items = e.detail.items;
+		// we have to somehow make the step above care about changes
+		// raise an event? an event which also emits the list?!
+		dispatch("dndfinalize",items)
 	}
 </script>
 
 <style>
 	section {
-        height: 260px;
+        height: 220px;
         width:100%;
 		padding: 0.3em;
 		border: 1px solid black;

@@ -16,8 +16,13 @@
 
 
 let imagesperpage = 6;
+let cansize = 400;
 export let minrating = 1;
 export let inputratio = 1.0;
+
+function dnd_listchange(){
+  
+}
 
 function generatePages(){
     $bookdic = [];
@@ -87,6 +92,19 @@ function addPage(){
     </div>
   </div>
 </div>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">
+      display-size of collages: {cansize}</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+      <input class="input" type="range" min="10" max="1980" step="10" bind:value={cansize}>
+    </div>
+    </div>
+  </div>
+</div>
 
  <Button type="is-primary block" on:click={generatePages}>Generate Pages</Button>
 <div class="columns">
@@ -97,8 +115,8 @@ function addPage(){
   <div class="column" style="overflow: auto; max-height: 84vh;">
   {#each ($bookdic || []) as onepage, i}
 
-    <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px"/>
-    <Collage rati={1.05} elements={onepage.elements} ratiocollage={inputratio}></Collage>
+    <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>
+    <Collage rati={1.05} elements={onepage.elements} ratiocollage={inputratio} canwidth={cansize}></Collage>
 <!-- 
     {#each (onepage.elements || []) as element, i}
         <div>{element.id}.-.-.</div>

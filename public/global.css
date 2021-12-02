@@ -60,3 +60,8 @@ button:active {
 button:focus {
 	border-color: #666;
 }
+.modal-card, .modal-content {
+    margin: 0 auto;
+    max-height: calc(100vh - 40px);
+    width: 98%;
+}

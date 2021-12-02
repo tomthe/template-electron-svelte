@@ -19,7 +19,8 @@
 
   export let elements = [];
   export let ratiocollage=1.0;
-
+  export let canwidth = 800;
+  // export let canheight = 500;
   
   let griditems = []
   let gridresolution = 10;
@@ -39,9 +40,8 @@
   // });
   
 
-function generatecollage(canwidth){
+function generatecollage(){
   
-  canwidth=600
   //canv = new fabric.Canvas(canvas);
   console.log("generatecollage foiw3", Object.keys($allImages),elements)//, ratio, ratio_value,rati, canvas.width,canvas.height);
 
@@ -138,6 +138,8 @@ function generatecollage(canwidth){
         }),
         canv.add(oImg);
     });
+  // var image = data.replace("image/jpg", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+  // window.location.href = image;
   }
   //
   
@@ -165,13 +167,23 @@ function generatecollage(canwidth){
 }
 
 function savecollage(){
-  canv.toDataUrl()
+
+  //let multiplier = 
+  let data = canv.toDataURL({
+    format: 'jpeg',
+    multiplier: 4       
+  });
+  
+  var image = data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+  window.location.href = image;
+
 }
 </script>
 
 <button on:click={generatecollage}>(re-)generate collage!</button>
 <button on:click={savecollage}>Save collage!</button>
-<canvas bind:this={canvas} width="600" height="{600}" />
+<canvas bind:this={canvas} width="{canwidth}" height="{canwidth}" />
+<!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
 
 
 <!--

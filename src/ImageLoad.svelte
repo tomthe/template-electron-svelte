@@ -228,4 +228,8 @@ function generateHash(inputstr){
 			max-width: none;
 		}
 	} */
+  .modal-card, .modal-content {
+    margin: 0 auto;
+    max-height: calc(100vh - 40px);
+    width: 99%;}
 </style>

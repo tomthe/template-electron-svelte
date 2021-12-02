@@ -20,7 +20,7 @@
 	Hier kommen mehrere Sachen hin. 
 	wenn es noch keine pages gibt: autogenerate pages + einstellungen
 	sonst: eine vertikale liste aller selektierter Bilder
-	und: eine vertikale liste aller pages - inklusive einer horizontalen liste der entsprechenden Bilder, sowie einer voransicht und sonstige sachen
+	und:  eine vertikale liste aller pages - inklusive einer horizontalen liste der entsprechenden Bilder, sowie einer voransicht und sonstige sachen
 	<Allpages>
 	</Allpages>
   </Tab>
