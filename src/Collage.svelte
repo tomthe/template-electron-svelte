@@ -40,7 +40,7 @@
   // });
   
 
-function generatecollage(){
+function generatecollage(thumbsize=true){
   
   //canv = new fabric.Canvas(canvas);
   console.log("generatecollage foiw3", Object.keys($allImages),elements)//, ratio, ratio_value,rati, canvas.width,canvas.height);
@@ -77,29 +77,42 @@ function generatecollage(){
   // griditems = createGrid(colpg);
 
   for(let i=0;i<colpg.length;i+=1){
-    console.log("add pic to collage in fabric:", i,colpg[i],$allImages[colpg[i].imid].fnsmall)
-    let fn = $allImages[colpg[i].imid].fnsmall
+    let fn,scale,origh,origw;
+    if (thumbsize){
+      fn = $allImages[colpg[i].imid].fnsmall
+      origw = $allImages[colpg[i].imid].wsmall 
+      origh = $allImages[colpg[i].imid].hsmall 
+    } else {
+      fn = $allImages[colpg[i].imid].fnorig
+      origw = $allImages[colpg[i].imid].worig 
+      origh = $allImages[colpg[i].imid].horig
+      
+    }
+
+    console.log("add pic to collage in fabric:", i,colpg[i],fn)
     fabric.Image.fromURL(fn, function(oImg) {
-        let scale = colpg[i].innerw / $allImages[colpg[i].imid].wsmall 
+        let scale = colpg[i].innerw / origw
         let xgap = 0;//
         let ygap = 0;
-        let orig_image_ratio = $allImages[colpg[i].imid].wsmall/$allImages[colpg[i].imid].hsmall;
+        let orig_image_ratio = origw/origh;
         let place_image_ratio = colpg[i].outerw/colpg[i].outerh;
         console.log("image ratios: ",place_image_ratio ,orig_image_ratio)
         if (place_image_ratio > orig_image_ratio){  //wenn ratio_platz > ratio_thumb
           // image scale is determined by its width:
           //scale: how much has the image to be scaled to fit?
-          scale = colpg[i].outerw/1.0 * widthcollage / $allImages[colpg[i].imid].wsmall
+          scale = colpg[i].outerw/1.0 * widthcollage / origw
+          //highres: scale = 
+
           //ygap: wie viel das thumb "übersteht".../2
           //wie bekomme ich das raus?
-          ygap= ($allImages[colpg[i].imid].hsmall * scale) - (colpg[i].outerh/1.0 * widthcollage)//orig_image_height - place_image_height 
+          ygap= (origh * scale) - (colpg[i].outerh/1.0 * widthcollage)//orig_image_height - place_image_height 
           console.log("ygap absolute:: ",ygap)
           ygap = ((place_image_ratio/orig_image_ratio) * colpg[i].outerh/1.0)-colpg[i].outerh; // 1/0.5 - 1
           console.log("ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // ygap=5
         } else {
           console.log("xxxx?")
-          scale = colpg[i].outerh/1.0 * widthcollage / $allImages[colpg[i].imid].hsmall
+          scale = colpg[i].outerh/1.0 * widthcollage / origh/1.0
           
           xgap = ((orig_image_ratio/place_image_ratio) * colpg[i].outerw)-colpg[i].outerw; // 1/0.5 - 1
           console.log("xgap ratio/ratio:: ",xgap)
