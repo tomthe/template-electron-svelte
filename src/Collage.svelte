@@ -3,6 +3,10 @@
   import { onMount } from 'svelte';
   import { allImages } from './allimagesstore.js';
   import {col} from './colnew.js';
+  const fs = require('fs');  // would prefer import
+  const util = require('util'); 
+  // import { fs } from "fs";
+  // import { fs } from "@electron"
   import Grid2 from './Grid2.svelte'
   import Grid1 from './Grid1.svelte'
   import Grid3 from './Grid3.svelte'
@@ -19,8 +23,10 @@
 
   export let elements = [];
   export let ratiocollage=1.0;
-  export let canwidth = 800;
-  // export let canheight = 500;
+  export let canwidth = 500;
+
+  //let $canheight = {canwidth/ratiocollage};
+  let canheight = 500
   let colpg;
   let col1;
   
@@ -79,7 +85,9 @@ function draw_collage(thumbsize=true){
   
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
-  let widthcollage = Math.min(canwidth,canwidth/ratiocollage);
+  let widthcollage = canwidth ;//Math.min(canwidth,canwidth/ratiocollage);
+  canheight = canwidth/ratiocollage
+
   //canv.fill("#fff")
   let borderthickness = 0.002;
   // background:
@@ -93,6 +101,8 @@ function draw_collage(thumbsize=true){
     });
   canv.add(rect);
   // griditems = createGrid(colpg);
+  let iloaded = 0
+  console.log("iloaded0: ", iloaded)
 
   for(let i=0;i<colpg.length;i+=1){
     let fn,scale,origh,origw;
@@ -106,9 +116,10 @@ function draw_collage(thumbsize=true){
       origh = $allImages[colpg[i].imid].horig
       
     }
-
     console.log("add pic to collage in fabric:", i,colpg[i],"fn:", fn,$allImages[colpg[i].imid])
     fabric.Image.fromURL(fn, function(oImg) {
+        iloaded+=1;
+        console.log("iloaded: ", iloaded)
         scale = colpg[i].innerw / origw
         let xgap = 0;//
         let ygap = 0;
@@ -170,9 +181,12 @@ function draw_collage(thumbsize=true){
         }),
         canv.add(oImg);
     });
+    
   // var image = data.replace("image/jpg", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
   // window.location.href = image;
   }
+  console.log("iloaded-end: ", iloaded)
+  console.log("colpg: ", colpg)
   //
   
     // function createGrid(colpg){
@@ -201,20 +215,85 @@ function draw_collage(thumbsize=true){
 function savecollage(){
   draw_collage(false)
   //let multiplier = 
+  setTimeout(function(){
+    let data = canv.toDataURL({
+      format: 'jpeg',
+      multiplier: 2.5
+    });
+    
+    var image = data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+    window.location.href = image;
+  },2500); 
+
+}
+
+function draw_collage_hires(){
+  draw_collage(false)
+}
+
+function savecollage2(){
+  //draw_collage(false)
+  //let multiplier = 
   let data = canv.toDataURL({
     format: 'jpeg',
-    multiplier: 1 
+    multiplier: 3.0
   });
   
   var image = data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
   window.location.href = image;
 
 }
+
+
+function savecollage_fs(){
+  let dataurl = canv.toDataURL({
+    format: 'jpeg',
+    multiplier: 4.5
+  });
+  
+  let imageblob = dataURLtoBlob(dataurl)//data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
+  //window.location.href = imageblob;
+  saveBlob(imageblob,"collage.jpg")
+  
+  // fs.
+}
+
+function savecollage_blob(){
+
+  canvas.toBlob(saveBlob);
+
+}
+function saveBlob(blob,fn="collage.jpg") {
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    fs.writeFile(fn, new Uint8Array(reader.result), err => {
+      if (err) {
+        alert("An error ocurred creating the file " + err.message);
+      } else {
+        console.log("The file has been successfully saved",fn);
+      }
+    });
+  }
+  reader.readAsArrayBuffer(blob);
+}
+
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
+
 </script>
 
 <button on:click={make_collage}>(re-)generate collage!</button>
+<button on:click={draw_collage_hires}>draw in high resolution</button>
 <button on:click={savecollage}>Save collage!</button>
-<canvas bind:this={canvas} width="{canwidth}" height="{canwidth}" />
+<button on:click={savecollage2}>Save collage2! (without draw)</button>
+<button on:click={savecollage_fs}>Save collage fs</button>
+<canvas bind:this={canvas} width="{canwidth}" height="{canheight}" />
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
 
 
