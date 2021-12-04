@@ -21,6 +21,8 @@
   export let ratiocollage=1.0;
   export let canwidth = 800;
   // export let canheight = 500;
+  let colpg;
+  let col1;
   
   let griditems = []
   let gridresolution = 10;
@@ -29,7 +31,6 @@
   //let can;
   let canvas;
   let canv;
-  let col1;
 
   onMount(() => {
     canv = new fabric.Canvas(canvas);
@@ -39,8 +40,17 @@
 	// 	ratio_value = value;
   // });
   
+function make_collage(){
+  if (colpg) {
+    generatecollage()
+    // re_generate_collage()
+  } else {
+    generatecollage()
+  }
+  draw_collage()
+}
 
-function generatecollage(thumbsize=true){
+function generatecollage(){
   
   //canv = new fabric.Canvas(canvas);
   console.log("generatecollage foiw3", Object.keys($allImages),elements)//, ratio, ratio_value,rati, canvas.width,canvas.height);
@@ -57,8 +67,16 @@ function generatecollage(thumbsize=true){
   col1 = new col(imids, ratioList, ratiocollage)
   
   console.log("col1:",col1)
-  let colpg = col1.generate_1_collage_and_save_if_good();
+  colpg = col1.generate_1_collage_and_save_if_good();
 
+}
+
+function re_generate_collage(){
+  colpg = col1.generate_1_collage_and_save_if_good()
+}
+
+function draw_collage(thumbsize=true){
+  
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
   let widthcollage = Math.min(canwidth,canwidth/ratiocollage);
@@ -83,15 +101,15 @@ function generatecollage(thumbsize=true){
       origw = $allImages[colpg[i].imid].wsmall 
       origh = $allImages[colpg[i].imid].hsmall 
     } else {
-      fn = $allImages[colpg[i].imid].fnorig
+      fn = $allImages[colpg[i].imid].pathorig
       origw = $allImages[colpg[i].imid].worig 
       origh = $allImages[colpg[i].imid].horig
       
     }
 
-    console.log("add pic to collage in fabric:", i,colpg[i],fn)
+    console.log("add pic to collage in fabric:", i,colpg[i],"fn:", fn,$allImages[colpg[i].imid])
     fabric.Image.fromURL(fn, function(oImg) {
-        let scale = colpg[i].innerw / origw
+        scale = colpg[i].innerw / origw
         let xgap = 0;//
         let ygap = 0;
         let orig_image_ratio = origw/origh;
@@ -108,7 +126,7 @@ function generatecollage(thumbsize=true){
           ygap= (origh * scale) - (colpg[i].outerh/1.0 * widthcollage)//orig_image_height - place_image_height 
           console.log("ygap absolute:: ",ygap)
           ygap = ((place_image_ratio/orig_image_ratio) * colpg[i].outerh/1.0)-colpg[i].outerh; // 1/0.5 - 1
-          console.log("ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
+          console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // ygap=5
         } else {
           console.log("xxxx?")
@@ -116,6 +134,7 @@ function generatecollage(thumbsize=true){
           
           xgap = ((orig_image_ratio/place_image_ratio) * colpg[i].outerw)-colpg[i].outerw; // 1/0.5 - 1
           console.log("xgap ratio/ratio:: ",xgap)
+          console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // xgap=0
           // ygap = zugross/2
         }
@@ -180,11 +199,11 @@ function generatecollage(thumbsize=true){
 }
 
 function savecollage(){
-
+  draw_collage(false)
   //let multiplier = 
   let data = canv.toDataURL({
     format: 'jpeg',
-    multiplier: 4       
+    multiplier: 1 
   });
   
   var image = data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
@@ -193,7 +212,7 @@ function savecollage(){
 }
 </script>
 
-<button on:click={generatecollage}>(re-)generate collage!</button>
+<button on:click={make_collage}>(re-)generate collage!</button>
 <button on:click={savecollage}>Save collage!</button>
 <canvas bind:this={canvas} width="{canwidth}" height="{canwidth}" />
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
