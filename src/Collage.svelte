@@ -83,10 +83,13 @@ function re_generate_collage(){
 
 function draw_collage(thumbsize=true){
   
-  console.log(".donlksef..",col1,"dfs",colpg)
+  //console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
   let widthcollage = canheight*ratiocollage;//Math.min(canwidth,canwidth/ratiocollage);
-  // canwidth = canheight*ratiocollage
+  canwidth = canheight*ratiocollage
+
+  canv.width = canwidth
+  canv.height = canheight
 
   //canv.fill("#fff")
   let borderthickness = 0.002;
