@@ -253,7 +253,8 @@ function savecollage_fs(){
   
   let imageblob = dataURLtoBlob(dataurl)//data.replace("image/jpeg", "image/octet-stream")//.replace("image/png", "image/octet-stream"); //Convert image to 'octet-stream' (Just a download, really)
   //window.location.href = imageblob;
-  saveBlob(imageblob,"collage.jpg")
+  let fn = "collagexr_" + Math.random().toString().substr(2, 8) + ".jpg"
+  saveBlob(imageblob,fn)
   
   // fs.
 }

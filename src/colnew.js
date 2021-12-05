@@ -23,10 +23,15 @@ export class col {
 
         //options for collage-creation:
         this.nImagesPerCollage=9;
-        this.option_maxRatioFit = 0.4;
+        this.option_maxRatioFit = 7.4;
         this.option_maxrrm = 0.2;
 
-        this.maxTries = 2480;
+        this.bestpg=[];
+        this.bestrrm=190;
+        this.bestRatioFit = 140;
+        this.besti;
+
+        this.maxTries = 2048;
         this.rrm = 22;
 
 
@@ -88,7 +93,7 @@ export class col {
 	  let option_maxrrm_temp = this.option_maxrrm;
 
 	  let startTime = performance.now();
-	  while(i_tries<this.maxTries && i_good < 1){
+	  while(i_tries<this.maxTries) {// && i_good < 1){
         // console.log(i_tries,"generate a new try, ")
 		i_tries++;
 		this.start_and_add_pics_to_collage();
@@ -103,23 +108,27 @@ export class col {
           this.pg=[];
 		  this.rrm = this.mainPair.draw(createVector(0,0),createVector(this.width,this.height),this.pg,this.inputratio);
 		  console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, option_maxRatioFit_temp,option_maxrrm_temp,this.pg);
-		  if(this.rrm<option_maxrrm_temp){
+		  if(this.rrm<this.bestrrm){
 			i_good++;
             //p.background(frameColor);
             this.pg=[];
             this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*1.0,1.0),this.pg,this.inputratio);
-            break;
+            this.bestrrm = this.rrm;
+            this.bestRatioFit = ratioFit;
+            this.bestpg = this.pg;
+            this.besti = i_tries;
+            //break;
 			//save("page" +round(rrm*1000)/1000 + "rf" + round(ratioFit*1000)/1000 +".jpg");
 			
 			//mainPair.saveToDisk(outputPath + "v1/page" +i_pic_in_folder_start + "rrm"+rrm + "rf" + ratioFit + ".data");
 		  } 
 		} else{
-			option_maxRatioFit_temp *= 1.01;
-			option_maxrrm_temp *= 1.01;
+			//option_maxRatioFit_temp *= 1.01;
+			//option_maxrrm_temp *= 1.01;
 		}
 	  }
-      console.log("done!!!" + "; " + i_tries + "; ",this.pg);
-      return this.pg;
+      console.log("done!!!" + "; " + i_tries + "; chosen i:", this.besti,"bestrrm:",this.bestrrm," this.bestRatioFit:",this.bestRatioFit,this.bestpg);
+      return this.bestpg;
 	}
 
 	getRatioFit(){
