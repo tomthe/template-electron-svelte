@@ -23,10 +23,10 @@
 
   export let elements = [];
   export let ratiocollage=1.0;
-  export let canwidth = 500;
+  export let canheight = 500;
 
-  //let $canheight = {canwidth/ratiocollage};
-  let canheight = 500
+  //let $canwidth = {canheight*ratiocollage};
+  let canwidth = 500
   let colpg;
   let col1;
   
@@ -85,8 +85,8 @@ function draw_collage(thumbsize=true){
   
   console.log(".donlksef..",col1,"dfs",colpg)
   canv.clear();
-  let widthcollage = canwidth ;//Math.min(canwidth,canwidth/ratiocollage);
-  canheight = canwidth/ratiocollage
+  let widthcollage = canheight*ratiocollage;//Math.min(canwidth,canwidth/ratiocollage);
+  // canwidth = canheight*ratiocollage
 
   //canv.fill("#fff")
   let borderthickness = 0.002;
@@ -95,8 +95,8 @@ function draw_collage(thumbsize=true){
       left: 0,
       top: 0,
       selectable: false,
-      width: widthcollage * ratiocollage,
-      height: widthcollage,
+      width: widthcollage,
+      height: canheight,
       fill: "black"
     });
   canv.add(rect);
@@ -129,19 +129,19 @@ function draw_collage(thumbsize=true){
         if (place_image_ratio > orig_image_ratio){  //wenn ratio_platz > ratio_thumb
           // image scale is determined by its width:
           //scale: how much has the image to be scaled to fit?
-          scale = colpg[i].outerw/1.0 * widthcollage / origw
+          scale = colpg[i].outerw/1.0 * canheight / origw
           //highres: scale = 
 
           //ygap: wie viel das thumb "übersteht".../2
           //wie bekomme ich das raus?
-          ygap= (origh * scale) - (colpg[i].outerh/1.0 * widthcollage)//orig_image_height - place_image_height 
+          ygap= (origh * scale) - (colpg[i].outerh/1.0 * canheight)//orig_image_height - place_image_height 
           console.log("ygap absolute:: ",ygap)
           ygap = ((place_image_ratio/orig_image_ratio) * colpg[i].outerh/1.0)-colpg[i].outerh; // 1/0.5 - 1
           console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // ygap=5
         } else {
           console.log("xxxx?")
-          scale = colpg[i].outerh/1.0 * widthcollage / origh/1.0
+          scale = (colpg[i].outerh/1.0 * canheight) / origh/1.0
           
           xgap = ((orig_image_ratio/place_image_ratio) * colpg[i].outerw)-colpg[i].outerw; // 1/0.5 - 1
           console.log("xgap ratio/ratio:: ",xgap)
@@ -164,17 +164,17 @@ function draw_collage(thumbsize=true){
         //oImg.scaleToWidth(scalewidth);
         //console.log("scale to this width: ", scalewidth)
         //oImg.scale(1.)
-        oImg.left = (colpg[i].outerx - xgap/2)/ 1.0 * widthcollage; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
-        oImg.top = (colpg[i].outery - ygap/2) /1.0 * widthcollage;
-        // oImg.width = colpg[i].outerw/ 100 * widthcollage * $ratio; //colpg[i].outerw
-        // oImg.height = colpg[i].outerh/ 100 * widthcollage;//$allImages[colpg[i].fn].heightsmall //100/100 / $ratio * widthcollage;//colpg[i].outerh 
+        oImg.left = (colpg[i].outerx - xgap/2)/ 1.0 * canheight; //todo: ersetzen der 100 durch einne versatz der das bild in die mitte schiebt
+        oImg.top = (colpg[i].outery - ygap/2) /1.0 * canheight;
+        // oImg.width = colpg[i].outerw/ 100 * canheight * $ratio; //colpg[i].outerw
+        // oImg.height = colpg[i].outerh/ 100 * canheight;//$allImages[colpg[i].fn].heightsmall //100/100 / $ratio * widthcollage;//colpg[i].outerh 
         
         let bt = borderthickness;
         oImg.clipPath= new fabric.Rect({
-          width: (colpg[i].outerw - 2*bt)/1.0*widthcollage,
-          height:(colpg[i].outerh - 2*bt)/1.0*widthcollage,//colpg[i].outerh,
-          top:(colpg[i].outery +  bt)/ 1.0 * widthcollage,
-          left:(colpg[i].outerx + bt)/ 1.0 * widthcollage,
+          width: (colpg[i].outerw - 2*bt)/1.0*canheight,
+          height:(colpg[i].outerh - 2*bt)/1.0*canheight,//colpg[i].outerh,
+          top:(colpg[i].outery +  bt)/ 1.0 * canheight,
+          left:(colpg[i].outerx + bt)/ 1.0 * canheight,
           // originX: 'center',
           // originY: 'center',
           absolutePositioned: true
@@ -293,7 +293,7 @@ function dataURLtoBlob(dataurl) {
 <button on:click={savecollage}>Save collage!</button>
 <button on:click={savecollage2}>Save collage2! (without draw)</button>
 <button on:click={savecollage_fs}>Save collage fs</button>
-<canvas bind:this={canvas} width="{canwidth}" height="{canheight}" />
+<canvas bind:this={canvas} width="1400px" height="{canheight}" />
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
 
 

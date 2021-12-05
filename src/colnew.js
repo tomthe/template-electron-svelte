@@ -23,10 +23,10 @@ export class col {
 
         //options for collage-creation:
         this.nImagesPerCollage=9;
-        this.option_maxRatioFit = 1.08;
-        this.option_maxrrm = 2;
+        this.option_maxRatioFit = 0.4;
+        this.option_maxrrm = 0.2;
 
-        this.maxTries = 480;
+        this.maxTries = 2480;
         this.rrm = 22;
 
 
@@ -40,7 +40,7 @@ export class col {
     }
 
      getpg(){
-        console.log("colnew getpg:", this.pg)
+        // console.log("colnew getpg:", this.pg)
         return this.pg;
     }
 
@@ -89,7 +89,7 @@ export class col {
 
 	  let startTime = performance.now();
 	  while(i_tries<this.maxTries && i_good < 1){
-        console.log(i_tries,"generate a new try, ")
+        // console.log(i_tries,"generate a new try, ")
 		i_tries++;
 		this.start_and_add_pics_to_collage();
 		let ratioFit = this.getRatioFit();
@@ -97,17 +97,17 @@ export class col {
 		if (perfTimePerCol>4){
 			//option_maxRatioFit = 1 + perfTimePerCol / 5;
 		}
-		console.log("try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, "performance: ", "input-ratio:",this.inputratio,performance.now()-startTime, perfTimePerCol,this.option_maxRatioFit, this.pg);
+		// console.log("try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, "performance: ", "input-ratio:",this.inputratio,performance.now()-startTime, perfTimePerCol,this.option_maxRatioFit, this.pg);
 		if(ratioFit<option_maxRatioFit_temp){
           //pg = 
           this.pg=[];
-		  this.rrm = this.mainPair.draw(createVector(0,0),createVector(this.width,this.height),this.pg);
-		  console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', this.ratioFit,this.pg);
+		  this.rrm = this.mainPair.draw(createVector(0,0),createVector(this.width,this.height),this.pg,this.inputratio);
+		  console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, option_maxRatioFit_temp,option_maxrrm_temp,this.pg);
 		  if(this.rrm<option_maxrrm_temp){
 			i_good++;
             //p.background(frameColor);
             this.pg=[];
-            this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*1.0,1.0),this.pg);
+            this.rrm = this.mainPair.draw(createVector(0,0),createVector(inputratio*1.0,1.0),this.pg,this.inputratio);
             break;
 			//save("page" +round(rrm*1000)/1000 + "rf" + round(ratioFit*1000)/1000 +".jpg");
 			
@@ -125,10 +125,11 @@ export class col {
 	getRatioFit(){
       let r = this.mainPair.getRatio();
       console.log("getratiofit", r)
-	  return Math.max(r/this.inputratio, this.inputratio/r);
+	  return Math.min(r/this.inputratio, this.inputratio/r);
+    //   return (this.inputratio/r);
 	}
 
-
+    
 	
 	
 }
@@ -321,7 +322,7 @@ class ImPair {
 
  
     //draw(pos, size, reallyDraw, pg, p, getImgAtPosition, mpos,positionCallback){
-    draw(pos,size,pg){
+    draw(pos,size,pg,inputratio){
         let rm=0;
         if(this.nIm==1) {
             let reallyDraw=true;
@@ -343,22 +344,23 @@ class ImPair {
             let ris = size.x/size.y;
             //console.log("inside draw", this.ratio,this.width,this.height,ris,size,pos)
             rm = (Math.max(ris/this.ratio, this.ratio/ris)-1) // (this.width * this.height) * size.x * size.y * 
-
+            rm = size.x * size.y * (Math.max(ris/this.ratio, this.ratio/ris)-1) // (inputratio);
+            
         } else {
             if(this.isNebeneinander){
                 let pos1 = {x:pos.x,y:pos.y};
                 let size1 = {x:size.x * this.getSplit(),y:size.y};
-                rm += this.im1.draw(pos1,size1, pg);
+                rm += this.im1.draw(pos1,size1, pg,inputratio);
                 let pos2 = {x:pos.x+size.x * this.getSplit(),y:pos.y};
                 let size2 = createVector(size.x * (1-this.getSplit()),size.y);
-                rm += this.im2.draw(pos2,size2, pg);
+                rm += this.im2.draw(pos2,size2, pg,inputratio);
             } else {
                 let pos1 = createVector(pos.x,pos.y,size.x);
                 let size1 = createVector(size.x,size.y * this.getSplit());
-                rm += this.im1.draw(pos1,size1, pg);
+                rm += this.im1.draw(pos1,size1, pg,inputratio);
                 let pos2 = createVector(pos.x,pos.y + size.y * this.getSplit());
                 let size2 = createVector(size.x,size.y * (1-this.getSplit()));
-                rm += this.im2.draw(pos2,size2, pg);
+                rm += this.im2.draw(pos2,size2, pg,inputratio);
             }
         }
         //console.log("draw.. rm: ", rm)

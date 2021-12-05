@@ -21,7 +21,7 @@ export let minrating = 1;
 export let inputratio = 1.0;
 
 function dnd_listchange(){
-  
+
 }
 
 function generatePages(){
@@ -116,7 +116,7 @@ function addPage(){
   {#each ($bookdic || []) as onepage, i}
 
     <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>
-    <Collage rati={1.05} elements={onepage.elements} ratiocollage={inputratio} canwidth={cansize}></Collage>
+    <Collage rati={1.05} elements={onepage.elements} ratiocollage={inputratio} canheight={cansize}></Collage>
 <!-- 
     {#each (onepage.elements || []) as element, i}
         <div>{element.id}.-.-.</div>
