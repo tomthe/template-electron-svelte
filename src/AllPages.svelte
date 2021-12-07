@@ -116,7 +116,7 @@ function addPage(){
   {#each ($bookdic || []) as onepage, i}
 
     <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>
-    <Collage rati={1.05} elements={onepage.elements} ratiocollage={inputratio} canheight={cansize}></Collage>
+    <Collage i_page={i} ratiocollage={inputratio} canheight={cansize}></Collage>
 <!-- 
     {#each (onepage.elements || []) as element, i}
         <div>{element.id}.-.-.</div>

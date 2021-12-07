@@ -1,7 +1,7 @@
 <script>
   import { fabric } from "fabric";
   import { onMount } from 'svelte';
-  import { allImages } from './allimagesstore.js';
+  import { allImages, bookdic } from './allimagesstore.js';
   import {col} from './colnew.js';
   const fs = require('fs');  // would prefer import
   const util = require('util'); 
@@ -21,9 +21,12 @@
   // export let idlist = []
   // export let ratioList = [];
 
-  export let elements = [];
+  //export let elements = [];
+  export let i_page = 0;
   export let ratiocollage=1.0;
   export let canheight = 500;
+
+  let elements = []
 
   //let $canwidth = {canheight*ratiocollage};
   let canwidth = 500
@@ -57,11 +60,9 @@ function make_collage(){
 }
 
 function generatecollage(){
+  elements = $bookdic[i_page].elements
   
-  //canv = new fabric.Canvas(canvas);
-  console.log("generatecollage foiw3", Object.keys($allImages),elements)//, ratio, ratio_value,rati, canvas.width,canvas.height);
-
-  let imids = elements.map(a => a.id); //Object.keys($allImages)
+  let imids =  elements.map(a => a.id); //Object.keys($allImages)
   let ratioList = elements.map(a => $allImages[a.id].worig/$allImages[a.id].horig)
   let widthList = elements.map(a => $allImages[a.id].worig)
 
@@ -105,7 +106,7 @@ function draw_collage(thumbsize=true){
   canv.add(rect);
   // griditems = createGrid(colpg);
   let iloaded = 0
-  console.log("iloaded0: ", iloaded)
+  console.log("iloaded0: ", iloaded,colpg)
 
   for(let i=0;i<colpg.length;i+=1){
     let fn,scale,origh,origw;
