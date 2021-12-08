@@ -2,24 +2,35 @@
     import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
     import {  allImages,bookdic } from './allimagesstore.js';
+  	import { onMount } from 'svelte';
     import  SingleImage  from './SingleImage.svelte'
 
-    export let items;
+    let items = [];
+	export let i_page;
     export let containerWidth = '200vw';
     export let itemWidth = '10%';
 	const flipDurationMs = 300;
 	import { createEventDispatcher } from 'svelte';
 
-    const dispatch = createEventDispatcher();
+    // const dispatch = createEventDispatcher();
+	
+	onMount(() => {
+		items = $bookdic[i_page].elements
+		console.log("horizontal-list. items:", items)
+	});
+	
+	
 	function handleDndConsider(e) {
 		items = e.detail.items;
 	}
 	function handleDndFinalize(e) {
 		items = e.detail.items;
+		$bookdic[i_page].elements = e.detail.items;
 		// we have to somehow make the step above care about changes
 		// raise an event? an event which also emits the list?!
-		dispatch("dndfinalize",items)
+		// dispatch("dndfinalize",items)
 	}
+
 </script>
 
 <style>

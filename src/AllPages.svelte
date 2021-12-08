@@ -50,6 +50,7 @@ function generatePages(){
 
 function addPage(){
     $bookdic.push({elements:[]})
+    $bookdic = $bookdic
 }
 </script>
 
@@ -115,7 +116,7 @@ function addPage(){
   <div class="column" style="overflow: auto; max-height: 84vh;">
   {#each ($bookdic || []) as onepage, i}
 
-    <HorizontalList items={onepage.elements} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>
+    <HorizontalList i_page={i} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>
     <Collage i_page={i} ratiocollage={inputratio} canheight={cansize}></Collage>
 <!-- 
     {#each (onepage.elements || []) as element, i}

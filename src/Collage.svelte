@@ -291,6 +291,10 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], {type:mime});
 }
 
+function add_page_here(){
+  $bookdic.splice(i_page, 0,{elements:[]})
+  $bookdic = $bookdic
+}
 </script>
 
 <button on:click={make_collage}>(re-)generate collage!</button>
@@ -298,6 +302,7 @@ function dataURLtoBlob(dataurl) {
 <button on:click={savecollage}>Save collage!</button>
 <button on:click={savecollage2}>Save collage2! (without draw)</button>
 <button on:click={savecollage_fs}>Save collage fs</button>
+<button on:click={add_page_here}>add page after this one</button>
 <canvas bind:this={canvas} width="1400px" height="{canheight}" />
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
 
