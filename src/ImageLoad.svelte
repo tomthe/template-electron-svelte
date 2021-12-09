@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import {  allImages,bookdic } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
-  import { Button, Modal } from 'svelma';
+  import { Button, Modal,ModalCard } from 'svelma';
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
@@ -18,27 +18,27 @@
   let selectedImageId;
   let active=false;
 
-  export let can;
+  // export let can;
 
 let rangewidth = 230;
 
-  let canvas;
-  let canv;
+  // let canvas;
+  // let canv;
 
   onMount(() => {
 
-    // loadallImages();
+    loadallImages2();
 
-    canv = new fabric.Canvas(canvas);
+    // canv = new fabric.Canvas(canvas);
 
-    const rect = new fabric.Rect({
-      left: 10,
-      top: 10,
-      width: 20,
-      height: 15,
-      fill: "blue"
-    });
-    canv.add(rect);
+    // const rect = new fabric.Rect({
+    //   left: 10,
+    //   top: 10,
+    //   width: 20,
+    //   height: 15,
+    //   fill: "blue"
+    // });
+    // canv.add(rect);
     
     //ipcRenderer.on('jimp-triggered', handleImage);
   });
@@ -95,17 +95,9 @@ sharp(files[i].path)
   });*/
 
     // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",thumbname);
-    files = files;
-        const rect = new fabric.Rect({
-        left: 40,
-        top: 20,
-        width: 50,
-        height: 15,
-        fill: "red"
-    });
-    canv.add(rect);
+    
   }
-  console.log($allImages)
+  // console.log($allImages)
 }
 
 function loadallImages2(){
@@ -140,6 +132,10 @@ function generateHash(inputstr){
       selectedImageId = Math.max(0, selectedImageId - 1)
     } else if (event.keyCode == 38) { //rating up
       // selectedImageId
+        $allImages[selectedImageId].rating +=1;
+        if($allImages[selectedImageId].rating > 5) {
+            $allImages[selectedImageId].rating = 5;
+        }
     }
     
   }
@@ -188,18 +184,23 @@ function generateHash(inputstr){
     </span>
 {/each} -->
 
-<br>brrrrrrrr
 {#each ($allImages || []) as oneimage, i}
 <div  style="display:inline-block"  on:dblclick={() => showfull(i)}>
   <SingleImage imageid={i} rwidth={rangewidth}></SingleImage>
 </div>
 {/each}
 
-<Modal bind:active={active}>
-  <p class="image">
+<Modal bind:active={active} showClose=true>
+  <!-- <p class="image"> -->
     <img alt="Test image" src={$allImages[selectedImageId].pathorig}/>
-  </p>
+  <!-- </p> -->
 </Modal>
+
+<!-- <ModalCard bind:active={active} title="My Modal Title">
+  <p class="image">
+    <img alt="Test image" src={$allImages[selectedImageId].pathorig} />
+  </p>
+</ModalCard> -->
 
 <!--
 {#each (files || []) as file, i}
@@ -210,7 +211,6 @@ function generateHash(inputstr){
 {/each}
 -->
 
-<canvas bind:this={canvas} width="500" height="300" />
 
 <button on:click={handleload}>nochmal handleload!</button>
 
