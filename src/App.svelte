@@ -9,12 +9,12 @@
 
 <Tabs style="is-fullwidth">
   <Tab label="Load and select images" icon="users">
-<div class="columns">
-  <div class="column is-two-thirds">
+<!-- <div class="columns">
+  <div class="column is-two-thirds"> -->
 	<ImageLoad name='moo'></ImageLoad>
-  </div>
+  <!-- </div>
   <div class="column"></div>
-</div>
+</div> -->
   </Tab>
   <Tab label="Order Pages" icon="map-marker-alt">
 	Hier kommen mehrere Sachen hin. 
@@ -28,7 +28,6 @@
 </Tabs>
 <main>
 </main>
-<!-- 
 <style>
 	main {
 		text-align: center;
@@ -36,9 +35,9 @@
 		max-width: 240px;
 		margin: 0 auto;
 	}
-	@media (min-width: 640px) {
+	@media (min-width: 940px) {
 		main {
 			max-width: none;
 		}
 	}
-</style> -->
+</style> 

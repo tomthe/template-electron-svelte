@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import {  allImages,bookdic } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
-  import { Button, Modal,ModalCard } from 'svelma';
+  import { Button, Modal } from 'svelma';
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
@@ -192,7 +192,7 @@ function generateHash(inputstr){
 
 <Modal bind:active={active} showClose=true>
   <!-- <p class="image"> -->
-    <img alt="Test image" src={$allImages[selectedImageId].pathorig}/>
+    <img alt="big view" width="95%" src={$allImages[selectedImageId].pathorig}/>
   <!-- </p> -->
 </Modal>
 
@@ -212,7 +212,7 @@ function generateHash(inputstr){
 -->
 
 
-<button on:click={handleload}>nochmal handleload!</button>
+<!-- <button on:click={handleload}>nochmal handleload!</button> -->
 
 
 
@@ -223,7 +223,7 @@ function generateHash(inputstr){
 		max-width: 240px;
 		margin: 0 auto;
 	}
-	@media (min-width: 640px) {
+	@media (min-width: 940px) {
 		main {
 			max-width: none;
 		}

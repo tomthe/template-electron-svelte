@@ -88,7 +88,7 @@ function addPage(){
   <div class="field-body">
     <div class="field">
       <div class="control">
-      <input class="input" type="range" min="0.2" max="5" step="0.1" bind:value={inputratio}>
+      <input class="input" type="range" min="0.2" max="5" step="0.01" bind:value={inputratio}>
     </div>
     </div>
   </div>
