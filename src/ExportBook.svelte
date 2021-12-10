@@ -3,15 +3,16 @@
 import pptxgen from "pptxgenjs";
 import {  allImages,bookdic } from './allimagesstore.js';
 const fs = require('fs');
+const sharp = require('sharp');
 
-export function export_ppt2() {
+export async function export_ppt2() {
     console.log("start export")
     
     let pptx = new pptxgen();
     // Define new layout for the Presentation
-    let w= mm2inch(297 + 2*3)
-    let h = mm2inch(210 +2*3)
-    pptx.defineLayout({ name:'A4wideplus3mm', width:w, height:h });
+    let pagew= mm2inch(297 + 2*3) // page-width in inch
+    let pageh = mm2inch(210 +2*3)
+    pptx.defineLayout({ name:'A4wideplus3mm', width:pagew, height:pageh });
     // Set presentation to use new layout
     pptx.layout = 'A4wideplus3mm'
 
@@ -28,7 +29,26 @@ export function export_ppt2() {
                 const img = $bookdic[i_page].colpg[i_pic];
                 // slide.addImage({ path: $allImages[img.imid].pathorig, x:100/r*img.outerx+"%",y:100*img.outery+"%",w:100/r*img.outerw+"%",h:100*img.outerh+"%",sizing:{type:"cover",w:100/r*img.outerw+"%",h:100*img.outerh+"%"}});
 
-                const imdata = "data:image/jpeg;base64," + fs.readFileSync($allImages[img.imid].pathorig, {encoding: 'base64'});
+                // const imdata = "data:image/jpeg;base64," + fs.readFileSync($allImages[img.imid].pathorig, {encoding: 'base64'});
+                // newwidth = 300dpi... 
+                // neuebreiteinpixel = neuebreiteincm * 300dpinch in cm = nbcm * 2.54 * 300
+                // neuebreiteincm = pagebreite in cm * innerw
+                const newwidth = parseInt(img.innerw * pagew * 300)
+                const imdata="";
+                if (newwidth < img.worig * 2) {
+                    imdata = "data:image/jpeg;base64," + fs.readFileSync($allImages[img.imid].pathorig, {encoding: 'base64'});
+                } else {
+                    imdata =  await sharp($allImages[img.imid].pathorig)
+                        .resize({ width: newwidth })
+                        .jpeg({
+                            quality: 88
+                        })
+                        .toBuffer();
+                    imdata = await "data:image/jpeg;base64," + imdata.toString('base64')
+                }
+                
+                // console.log(imdata)
+                
                 slide.addImage({data:imdata, 
                     x:bt + 100/r*img.outerx+"%",
                     y:bt + 100*img.outery+"%",
