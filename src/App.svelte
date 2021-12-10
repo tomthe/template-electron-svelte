@@ -1,9 +1,10 @@
 <script>
-	export let name;
+	// export let name;
 	import ImageLoad from './ImageLoad.svelte';
 	import 'bulma/css/bulma.css';
-	  import { Tabs, Tab } from 'svelma'
+	import { Tabs, Tab } from 'svelma'
 	import Allpages from './Allpages.svelte';
+	import ExportBook from './ExportBook.svelte'
 </script>
 
 
@@ -17,14 +18,16 @@
 </div> -->
   </Tab>
   <Tab label="Order Pages" icon="map-marker-alt">
-	Hier kommen mehrere Sachen hin. 
+	a1.Hier kommen mehrere Sachen hin. 
 	wenn es noch keine pages gibt: autogenerate pages + einstellungen
 	sonst: eine vertikale liste aller selektierter Bilder
 	und:  eine vertikale liste aller pages - inklusive einer horizontalen liste der entsprechenden Bilder, sowie einer voransicht und sonstige sachen
 	<Allpages>
 	</Allpages>
   </Tab>
-  <Tab label="View Pages" icon="ellipsis-h"></Tab>
+  <Tab label="Export Book" icon="ellipsis-h">
+  <ExportBook></ExportBook>
+  </Tab>
 </Tabs>
 <main>
 </main>
