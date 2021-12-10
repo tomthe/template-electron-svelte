@@ -3,8 +3,9 @@
     import { allImages } from './allimagesstore.js';
     import { onMount } from 'svelte';
     export let imageid, rwidth;
-    import { Button, Modal } from 'svelma';
+    import { Button } from 'svelma';
     import { Icon } from 'svelma';
+	import Modal,{getModal} from './Modal.svelte'
 
     let active = false;
     // handleClick(() =>{
@@ -50,7 +51,8 @@
 
 <div  style="display:inline-block" on:click={handleClick2}  on:dblclick={handleDblclick}>
 {imageid}
-{$allImages[imageid].fnsmall} <br>
+<!-- {$allImages[imageid].pathorig[-10:]} <br> -->
+<br>
 <img class="thumb" src={'file://' + $allImages[imageid].fnsmall} width={rwidth} title={$allImages[imageid].fnorig} data-id={imageid} alt="noPicuuiiu"/>
 <br>
 Rating: {$allImages[imageid].rating}

@@ -4,7 +4,10 @@
   import { onMount } from 'svelte';
   import {  allImages,bookdic } from './allimagesstore.js';
   import  SingleImage  from './SingleImage.svelte'
-  import { Button, Modal } from 'svelma';
+  import { Button } from 'svelma';
+  // import { Modal } from 'svelma';
+  
+	import Modal,{getModal} from './Modal.svelte'
   const sharp = require('sharp');
   //import { sharp } from "sharp"; // this doesn't work, use require instead
   //const fs = require('fs')
@@ -15,9 +18,10 @@
 
 	// export let name;
 	export let files = []
-  let selectedImageId;
+  let selectedImageId=-1;
   let active=false;
-
+  let modalsource="";
+  $: if (selectedImageId > 0) {modalsource = $allImages[selectedImageId].pathorig;}
   // export let can;
 
 let rangewidth = 230;
@@ -50,7 +54,10 @@ let rangewidth = 230;
 
 async function handleload(event){
   let newimageentry;
-  console.log("baba",allImages)
+  if (!$allImages){
+    $allImages = []
+  }
+  console.log("allimages: ",$allImages,$allImages.length)
   //console.log(files[0])
   //ipcRenderer.send('trigger-jimp', files);
   for(let i=0;i<files.length;i+=1){
@@ -131,18 +138,18 @@ function generateHash(inputstr){
     } else     if (event.keyCode == 37) {
       selectedImageId = Math.max(0, selectedImageId - 1)
     } else if (event.keyCode == 38) { //rating up
-      // selectedImageId
-        $allImages[selectedImageId].rating +=1;
-        if($allImages[selectedImageId].rating > 5) {
-            $allImages[selectedImageId].rating = 5;
-        }
+      $allImages[selectedImageId].rating = Math.min( $allImages[selectedImageId].rating+1, 5)
+    } else if (event.keyCode == 40) { //rating down
+      $allImages[selectedImageId].rating = Math.max( $allImages[selectedImageId].rating-1, 0)
     }
     
   }
   function showfull(imageid){
     console.log("imageload - showfull",imageid)
     selectedImageId = imageid;
-    active = true;
+    // active = true;
+    modalsource = $allImages[selectedImageId].pathorig;
+    getModal().open()
   }
 
 </script>
@@ -190,17 +197,13 @@ function generateHash(inputstr){
 </div>
 {/each}
 
-<Modal bind:active={active} showClose=true>
-  <!-- <p class="image"> -->
+<!-- <Modal bind:active={active} showClose=true>
     <img alt="big view" width="95%" src={$allImages[selectedImageId].pathorig}/>
-  <!-- </p> -->
-</Modal>
+</Modal> -->
 
-<!-- <ModalCard bind:active={active} title="My Modal Title">
-  <p class="image">
-    <img alt="Test image" src={$allImages[selectedImageId].pathorig} />
-  </p>
-</ModalCard> -->
+<Modal>
+    <img alt="big view" width="95%" src={modalsource}/>
+</Modal>
 
 <!--
 {#each (files || []) as file, i}
