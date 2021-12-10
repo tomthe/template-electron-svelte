@@ -75,6 +75,8 @@ function generatecollage(){
   
   console.log("col1:",col1)
   colpg = col1.generate_1_collage_and_save_if_good();
+  $bookdic[i_page].colpg = colpg
+  $bookdic=$bookdic
 
 }
 
@@ -191,6 +193,8 @@ function draw_collage(thumbsize=true){
   }
   console.log("iloaded-end: ", iloaded)
   console.log("colpg: ", colpg)
+  $bookdic[i_page].fabricjson = canv.toJSON()
+  $bookdic[i_page].options ={ratiocollage:ratiocollage}
   //
   
     // function createGrid(colpg){
