@@ -52,6 +52,17 @@ function addPage(){
     $bookdic.push({elements:[]})
     $bookdic = $bookdic
 }
+
+function setratio(formatname){
+  if (formatname=="A4wide"){
+    inputratio=((297+2*3)/(210+2*3))
+  } else if (formatname=="A4high"){
+    inputratio=((210+2*3)/(297+2*3))
+  } else if (formatname=="A4wide"){
+    inputratio=1.0;
+  } 
+}
+
 </script>
 
 <div class="field is-horizontal">
@@ -85,6 +96,10 @@ function addPage(){
     <label class="label">
       width/height of collages: {inputratio}</label>
   </div>
+  
+  
+<button on:click={inputratio=((297+2*3)/(210+2*3))}>DIN A4 wide</button>
+<button on:click={inputratio=((210+2*3)/(297+2*3))}>DIN A4 high</button>
   <div class="field-body">
     <div class="field">
       <div class="control">
