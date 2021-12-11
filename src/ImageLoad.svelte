@@ -204,7 +204,7 @@ function generateHash(inputstr){
 </Modal> -->
 
 <Modal>
-    <img alt="big view" width="95%" src={modalsource}/>
+    <img alt="big view" style="max-height: 95vh;" src={modalsource}/>
 </Modal>
 
 <!--

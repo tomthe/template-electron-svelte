@@ -4,14 +4,19 @@ import pptxgen from "pptxgenjs";
 import {  allImages,bookdic } from './allimagesstore.js';
 const fs = require('fs');
 const sharp = require('sharp');
+let exportactive = false;
 
 export async function export_ppt2() {
     console.log("start export")
+    exportactive = true;
     
     let pptx = new pptxgen();
     // Define new layout for the Presentation
-    let pagew= mm2inch(297 + 2*3) // page-width in inch
-    let pageh = mm2inch(210 +2*3)
+    const obinch = mm2inch(10) //outerbordermm 
+    const pagew = mm2inch(297 + 2*3) // page-width in inch
+    const pageh = mm2inch(210 +2*3)
+    const ob =  obinch/pageh //outerborder
+
     pptx.defineLayout({ name:'A4wideplus3mm', width:pagew, height:pageh });
     // Set presentation to use new layout
     pptx.layout = 'A4wideplus3mm'
@@ -34,7 +39,7 @@ export async function export_ppt2() {
                 // neuebreiteinpixel = neuebreiteincm * 300dpinch in cm = nbcm * 2.54 * 300
                 // neuebreiteincm = pagebreite in cm * innerw
                 const desired_dpi = 150
-                const newwidth = parseInt(img.innerw * pagew * desired_dpi)
+                const newwidth = parseInt(img.outerw/img.innerw * pagew * desired_dpi)
                 let imdata="";
                 if (newwidth < img.worig * 2) {
                     imdata = "data:image/jpeg;base64," + fs.readFileSync($allImages[img.imid].pathorig, {encoding: 'base64'});
@@ -85,16 +90,20 @@ export async function export_ppt2() {
                 //         h:-2*bt +   100*img.outerh+"%",
                 //     }
                 // });
-                // this is good for landscape and bad for horizontal original images:
+                // 
+                let xpos = 100/r*img.outerx;
+                let xpos_innerboarder = bt/r + xpos
+                let xpos_innerandouterboarder = (xpos_innerboarder*(1-2*ob)) + ob/r*100
+
                 slide.addImage({data:imdata, 
-                    x:bt/r + 100/r*img.outerx+"%",
-                    y:bt + 100*img.outery+"%",
+                    x:ob/r*100 + bt/r + 100/r*img.outerx*(1-2*ob/r)+"%",
+                    y:ob*100 + bt + 100*img.outery*(1-2*ob)+"%",
                     w:100/r*($allImages[img.imid].rorig)+"%",
                     h:"100%",//h:100*img.innerh+"%",
                     sizing:{
                         type:"cover",
-                        w:-2*bt/r + 100/r*img.outerw+"%",
-                        h:-2*bt +   100*img.outerh+"%"
+                        w:(1-ob*2/r)*(-2*bt/r + 100/r*img.outerw)+"%",
+                        h:(1-ob*2)*(-2*bt +   100*img.outerh)+"%"
                     }
                 });
 
@@ -108,6 +117,7 @@ export async function export_ppt2() {
     console.log("before saving export")
     pptx.writeFile({ fileName: "collage1.pptx" });
     console.log("after saving export")
+    exportactive=false;
 }
 
 function mm2inch(mm) {
@@ -119,3 +129,6 @@ function mm2inch(mm) {
 
 <!-- <button on:click={export_ppt1}>export collage!</button> -->
 <button on:click={export_ppt2}>export collage2!</button>
+{#if exportactive}
+Export is running...    
+{/if}
