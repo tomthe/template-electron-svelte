@@ -32,6 +32,10 @@
   let canwidth = 500
   let colpg;
   let col1;
+  let bgcolor="000000"
+
+  $: console.log("bgcolor: ",bgcolor)
+  // $: $bookdic[i_page].options.bgcolor = bgcolor
   
   let griditems = []
   let gridresolution = 10;
@@ -42,7 +46,9 @@
   let canv;
 
   onMount(() => {
+    console.log("i_page:",i_page)
     canv = new fabric.Canvas(canvas);
+    console.log("$bookdic[i_page]: ", $bookdic[i_page])
   });
 
 	// const unsubscribe = ratio.subscribe(value => {
@@ -103,7 +109,7 @@ function draw_collage(thumbsize=true){
       selectable: false,
       width: widthcollage,
       height: canheight,
-      fill: "black"
+      fill: bgcolor
     });
   canv.add(rect);
   // griditems = createGrid(colpg);
@@ -307,7 +313,9 @@ function add_page_here(){
 <button on:click={savecollage2}>Save collage2! (without draw)</button>
 <button on:click={savecollage_fs}>Save collage fs</button>
 <button on:click={add_page_here}>add page after this one</button>
+<input name="Color Picker" type="color" bind:value={bgcolor} />
 <canvas bind:this={canvas} width="1400px" height="{canheight}" />
+
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
 
 

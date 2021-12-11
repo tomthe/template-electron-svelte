@@ -191,11 +191,13 @@ function generateHash(inputstr){
     </span>
 {/each} -->
 
+<div style="overflow-y:auto; height:95vh;">
 {#each ($allImages || []) as oneimage, i}
 <div  style="display:inline-block"  on:dblclick={() => showfull(i)}>
   <SingleImage imageid={i} rwidth={rangewidth}></SingleImage>
 </div>
 {/each}
+</div>
 
 <!-- <Modal bind:active={active} showClose=true>
     <img alt="big view" width="95%" src={$allImages[selectedImageId].pathorig}/>

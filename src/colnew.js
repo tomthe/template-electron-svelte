@@ -80,7 +80,7 @@ export class col {
 
 	generate_1_collage_and_save_if_good (){
       let inputratio = this.inputratio;
-	  console.log('generate_1_collage_and save if good.....!',this.idList.length); //, i_pic_in_folder_start, number_of_pics);
+	//   console.log('generate_1_collage_and save if good.....!',this.idList.length); //, i_pic_in_folder_start, number_of_pics);
       if (this.idList.length <1){
           console.log("no images in this sketch!")
           return;
@@ -107,7 +107,7 @@ export class col {
           //pg = 
           this.pg=[];
 		  this.rrm = this.mainPair.draw(createVector(0,0),createVector(this.width,this.height),this.pg,this.inputratio);
-		  console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, option_maxRatioFit_temp,option_maxrrm_temp,this.pg);
+		  //   console.log("wooo - try Number", i_tries,"| rrm: ", this.rrm, '| RatioFit: ', ratioFit, option_maxRatioFit_temp,option_maxrrm_temp,this.pg);
 		  if(this.rrm<this.bestrrm){
 			i_good++;
             //p.background(frameColor);
@@ -133,7 +133,7 @@ export class col {
 
 	getRatioFit(){
       let r = this.mainPair.getRatio();
-      console.log("getratiofit", r)
+        //   console.log("getratiofit", r)
 	  return Math.min(r/this.inputratio, this.inputratio/r);
     //   return (this.inputratio/r);
 	}

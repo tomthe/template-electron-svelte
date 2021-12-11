@@ -18,7 +18,7 @@ export async function export_ppt2() {
 
     for (let i_page = 0; i_page < $bookdic.length; i_page++) {
         let r = $bookdic[i_page].options.ratiocollage
-        let bt = $bookdic[i_page].options.borderthickness ||0.33
+        let bt = $bookdic[i_page].options.borderthickness ||0.18
         // const element = array[i];
         let slide = pptx.addSlide();
         // slide.addText("ppt Demo!", { x: 1, y: 1, w: 10, h:3, fontSize: 36, fill: { color: "F1F1F1" }, align: "center",shrink:true });
@@ -33,8 +33,9 @@ export async function export_ppt2() {
                 // newwidth = 300dpi... 
                 // neuebreiteinpixel = neuebreiteincm * 300dpinch in cm = nbcm * 2.54 * 300
                 // neuebreiteincm = pagebreite in cm * innerw
-                const newwidth = parseInt(img.innerw * pagew * 300)
-                const imdata="";
+                const desired_dpi = 150
+                const newwidth = parseInt(img.innerw * pagew * desired_dpi)
+                let imdata="";
                 if (newwidth < img.worig * 2) {
                     imdata = "data:image/jpeg;base64," + fs.readFileSync($allImages[img.imid].pathorig, {encoding: 'base64'});
                 } else {
@@ -45,21 +46,59 @@ export async function export_ppt2() {
                         })
                         .toBuffer();
                     imdata = await "data:image/jpeg;base64," + imdata.toString('base64')
+                    
+                    // let imdata2 =  await sharp($allImages[img.imid].pathorig)
+                    //     .resize({ width: newwidth })
+                    //     .jpeg({
+                    //         quality: 88
+                    //     })
+                    //     .toFile(img.imid + "_lalala.jpg");
                 }
                 
                 // console.log(imdata)
-                
+                // 
+                // colpg:
+                // outer_ gibt die position und größe eines bildes
+                //  relativ zur gesamten Seite an
+                // inner_ gibt die position und größe des Ausschnitts eines bildes
+                //  relativ zu diesem Bild an
+
+                // pptx...:
+                // **crop**
+                // 
+                // **cover**
+                // 
+                // 
+                //                
+
+// 
+// 
+//                  
+                // slide.addImage({data:imdata, 
+                //     x:bt/r + 100/r*img.outerx+"%",
+                //     y:bt + 100*img.outery+"%",
+                //     w:"100%", //w:100/r*img.innerw+"%",
+                //     h:"100%",//h:100*img.innerh+"%",
+                //     sizing:{
+                //         type:"crop",
+                //         w:-2*bt/r + 100/r*img.outerw+"%",
+                //         h:-2*bt +   100*img.outerh+"%",
+                //     }
+                // });
+                // this is good for landscape and bad for horizontal original images:
                 slide.addImage({data:imdata, 
-                    x:bt + 100/r*img.outerx+"%",
+                    x:bt/r + 100/r*img.outerx+"%",
                     y:bt + 100*img.outery+"%",
-                    w:100/r*img.innerw+"%",
-                    h:100*img.innerh+"%",
+                    w:100/r*($allImages[img.imid].rorig)+"%",
+                    h:"100%",//h:100*img.innerh+"%",
                     sizing:{
                         type:"cover",
-                        w:-2*bt + 100/r*img.outerw+"%",
+                        w:-2*bt/r + 100/r*img.outerw+"%",
                         h:-2*bt +   100*img.outerh+"%"
                     }
                 });
+
+
                 // console.log("imdata: ",imdata)
             }
         }

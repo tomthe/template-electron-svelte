@@ -17,7 +17,7 @@
 
 let imagesperpage = 6;
 let cansize = 400;
-export let minrating = 1;
+export let minrating = 0;
 export let inputratio = 1.0;
 
 function dnd_listchange(){
@@ -27,7 +27,7 @@ function dnd_listchange(){
 function generatePages(){
     $bookdic = [];
     let j = 0;
-    let page = {elements:[]}
+    let page = {elements:[],options:{}}
     let element = {};
     for(let i=0;i<$allImages.length;i+=1){
         if ($allImages[i].rating >= minrating){
@@ -60,7 +60,17 @@ function setratio(formatname){
     inputratio=((210+2*3)/(297+2*3))
   } else if (formatname=="A4wide"){
     inputratio=1.0;
-  } 
+  }
+  if ($bookdic){
+    for (let ipage = 0; ipage < $bookdic.length; ipage++) {
+      if ("options" in $bookdic[ipage]) {
+        $bookdic[ipage].options.ratiocollage = inputratio
+      } else{
+        $bookdic[ipage].options = {ratiocollage:inputratio}
+      }    
+    }
+  }
+  $bookdic = $bookdic
 }
 
 </script>
@@ -98,8 +108,8 @@ function setratio(formatname){
   </div>
   
   
-<button on:click={inputratio=((297+2*3)/(210+2*3))}>DIN A4 wide</button>
-<button on:click={inputratio=((210+2*3)/(297+2*3))}>DIN A4 high</button>
+<button on:click={() => {setratio("A4wide")}}>DIN A4 wide</button>
+<button on:click={() => {setratio("A4high")}}>DIN A4 high</button>
   <div class="field-body">
     <div class="field">
       <div class="control">
@@ -125,7 +135,7 @@ function setratio(formatname){
  <Button type="is-primary block" on:click={generatePages}>Generate Pages</Button>
 <div class="columns">
   <div class="column is-2">
-    <VerticalList items={$allImages  || []}/> 
+    <VerticalList items={$allImages.filter(img => img.rating >= minrating) || []}/> 
   </div>
 
   <div class="column" style="overflow: auto; max-height: 84vh;">
