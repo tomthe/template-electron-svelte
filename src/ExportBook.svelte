@@ -12,7 +12,7 @@ export async function export_ppt2() {
     
     let pptx = new pptxgen();
     // Define new layout for the Presentation
-    const obinch = mm2inch(10) //outerbordermm 
+    const obinch = mm2inch(4.5) //outerbordermm 
     const pagew = mm2inch(297 + 2*3) // page-width in inch
     const pageh = mm2inch(210 +2*3)
     const ob =  obinch/pageh //outerborder
@@ -130,5 +130,6 @@ function mm2inch(mm) {
 <!-- <button on:click={export_ppt1}>export collage!</button> -->
 <button on:click={export_ppt2}>export collage2!</button>
 {#if exportactive}
+<progress class="progress is-large is-info" max="100">...</progress>
 Export is running...    
 {/if}

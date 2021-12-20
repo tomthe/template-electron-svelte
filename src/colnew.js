@@ -93,7 +93,7 @@ export class col {
 	  let option_maxrrm_temp = this.option_maxrrm;
 
 	  let startTime = performance.now();
-	  while(i_tries<this.maxTries) {// && i_good < 1){
+	  while(i_tries<(this.maxTries + 900 * this.idList.length)) {// && i_good < 1){
         // console.log(i_tries,"generate a new try, ")
 		i_tries++;
 		this.start_and_add_pics_to_collage();

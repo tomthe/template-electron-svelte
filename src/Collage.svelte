@@ -7,9 +7,11 @@
   const util = require('util'); 
   // import { fs } from "fs";
   // import { fs } from "@electron"
-  import Grid2 from './Grid2.svelte'
-  import Grid1 from './Grid1.svelte'
-  import Grid3 from './Grid3.svelte'
+  // import Grid2 from './Grid2.svelte'
+  // import Grid1 from './Grid1.svelte'
+  // import Grid3 from './Grid3.svelte'
+  // import Grid4 from './Grid4.svelte'
+  // import Grid5 from './Grid5.svelte'
   // import Grid from "svelte-grid";
   import gridHelp from "svelte-grid/build/helper";
 
@@ -34,8 +36,6 @@
   let col1;
   let bgcolor="000000"
 
-  $: console.log("bgcolor: ",bgcolor)
-  // $: $bookdic[i_page].options.bgcolor = bgcolor
   
   let griditems = []
   let gridresolution = 10;
@@ -50,6 +50,26 @@
     canv = new fabric.Canvas(canvas);
     console.log("$bookdic[i_page]: ", $bookdic[i_page])
   });
+  
+  // $: console.log("bgcolor: ",bgcolor)
+  // $: $bookdic[i_page].options.bgcolor = bgcolor
+
+  $: {
+    change_i_page(i_page);
+  }
+  
+  function change_i_page(i_page){
+    colpg = $bookdic[i_page].colpg
+    if(canv){
+      draw_collage()
+    } else {
+      if (colpg){
+        canv = new fabric.Canvas(canvas);
+        draw_collage()
+        console.log("no canvas, ipage:",i_page)
+      }
+    }
+  }
 
 	// const unsubscribe = ratio.subscribe(value => {
 	// 	ratio_value = value;
@@ -137,7 +157,7 @@ function draw_collage(thumbsize=true){
         let ygap = 0;
         let orig_image_ratio = origw/origh;
         let place_image_ratio = colpg[i].outerw/colpg[i].outerh;
-        console.log("image ratios: ",place_image_ratio ,orig_image_ratio)
+        // console.log("image ratios: ",place_image_ratio ,orig_image_ratio)
         if (place_image_ratio > orig_image_ratio){  //wenn ratio_platz > ratio_thumb
           // image scale is determined by its width:
           //scale: how much has the image to be scaled to fit?
@@ -147,24 +167,24 @@ function draw_collage(thumbsize=true){
           //ygap: wie viel das thumb "übersteht".../2
           //wie bekomme ich das raus?
           ygap= (origh * scale) - (colpg[i].outerh/1.0 * canheight)//orig_image_height - place_image_height 
-          console.log("ygap absolute:: ",ygap)
+          // console.log("ygap absolute:: ",ygap)
           ygap = ((place_image_ratio/orig_image_ratio) * colpg[i].outerh/1.0)-colpg[i].outerh; // 1/0.5 - 1
-          console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
+          // console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // ygap=5
         } else {
-          console.log("xxxx?")
+          // console.log("xxxx?")
           scale = (colpg[i].outerh/1.0 * canheight) / origh/1.0
           
           xgap = ((orig_image_ratio/place_image_ratio) * colpg[i].outerw)-colpg[i].outerw; // 1/0.5 - 1
-          console.log("xgap ratio/ratio:: ",xgap)
-          console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
+          // console.log("xgap ratio/ratio:: ",xgap)
+          // console.log("scale: ",scale,"ygap ratio/ratio:: ",ygap, place_image_ratio,orig_image_ratio, (place_image_ratio/orig_image_ratio), colpg[i].outerh)
           // xgap=0
           // ygap = zugross/2
         }
         
          oImg.scale(scale)
-         console.log("sdfsdfw", colpg[i], $allImages[colpg[i].imid],$allImages[colpg[i].imid].hsmall);
-        console.log("widthcollage, scale:",widthcollage,scale,colpg[i].outerw, $allImages[colpg[i].imid].worig)
+        // console.log("sdfsdfw", colpg[i], $allImages[colpg[i].imid],$allImages[colpg[i].imid].hsmall);
+        // console.log("widthcollage, scale:",widthcollage,scale,colpg[i].outerw, $allImages[colpg[i].imid].worig)
         /*
         oImg.scale(scale);
         oImg.left=colpg[i].outerx / 100 * widthcollage;
@@ -302,7 +322,7 @@ function dataURLtoBlob(dataurl) {
 }
 
 function add_page_here(){
-  $bookdic.splice(i_page, 0,{elements:[]})
+  $bookdic.splice(i_page+1, 0,{elements:[],options:{}})
   $bookdic = $bookdic
 }
 </script>
@@ -317,7 +337,8 @@ function add_page_here(){
 <canvas bind:this={canvas} width="1400px" height="{canheight}" />
 
 <!-- <canvas bind:this={canvas} width="{canwidth}" height="{canwidth/ratiocollage}" /> -->
-
+<br>
+<!-- <Grid5 i_pag e={i_page}></Grid5> -->
 
 <!--
 <Grid2 colitems={griditems}></Grid2>

@@ -1,4 +1,4 @@
- <script>   
+ 	<script>   
     import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
     import {  allImages,bookdic } from './allimagesstore.js';
@@ -14,6 +14,10 @@
 
     // const dispatch = createEventDispatcher();
 	
+	$: {
+		items =  $bookdic[i_page].elements;
+	}
+
 	onMount(() => {
 		items = $bookdic[i_page].elements
 		console.log("horizontal-list. items:", items)
@@ -35,7 +39,7 @@
 
 <style>
 	section {
-        height: 220px;
+        height: 250px;
         width:100%;
 		padding: 0.3em;
 		border: 1px solid black;
@@ -43,11 +47,12 @@
 		overflow-x: auto;
 	}
 	div {
-        height: 200px;
+        height: 237px;
         display: inline-block;
 		padding: 0.9em;
 		border: 1px solid blue;
 		margin: 0 0.15em;
+		overflow-x: auto;
 	}
 </style>
 <section style="width:{containerWidth}" use:dndzone={{items, flipDurationMs}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>

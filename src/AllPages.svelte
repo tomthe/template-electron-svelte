@@ -113,8 +113,8 @@ function setratio(formatname){
   <div class="field-body">
     <div class="field">
       <div class="control">
-      <input class="input" type="range" min="0.2" max="5" step="0.01" bind:value={inputratio}>
-    </div>
+        <input class="input" type="range" min="0.2" max="5" step="0.01" bind:value={inputratio}>
+      </div>
     </div>
   </div>
 </div>
@@ -133,12 +133,12 @@ function setratio(formatname){
 </div>
 
  <Button type="is-primary block" on:click={generatePages}>Generate Pages</Button>
-<div class="columns">
+<div class="columns is-12" style="width: 100vw;">
   <div class="column is-2">
     <VerticalList items={$allImages.filter(img => img.rating >= minrating) || []}/> 
   </div>
 
-  <div class="column" style="overflow: auto; max-height: 84vh;">
+  <div class="column is-10" style="overflow: auto; max-height: 84vh;">
   {#each ($bookdic || []) as onepage, i}
 
     <HorizontalList i_page={i} containerWidth="100%" itemWidth="200px" on:dndfinalize={dnd_listchange}/>

@@ -22,7 +22,7 @@
 
     
     function handleDblclick() {
-        console.log("dblclick!",$allImages[imageid].fnorig, "|", $allImages[imageid].fnorig.path,"|||", $allImages[imageid].pathorig,"hoho");
+        console.log("dblclick!",$allImages[imageid].pathorig,"hoho");
         
         $allImages[imageid].rating -=2;
         if($allImages[imageid].rating ==-2) {
