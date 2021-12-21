@@ -22,7 +22,8 @@ export async function export_ppt2() {
     pptx.layout = 'A4wideplus3mm'
 
     for (let i_page = 0; i_page < $bookdic.length; i_page++) {
-        let r = $bookdic[i_page].options.ratiocollage
+        console.log("Page ", i_page," of ",$bookdic.length)
+        let r = $bookdic[i_page].options.ratiocollage 
         let bt = $bookdic[i_page].options.borderthickness ||0.18
         // const element = array[i];
         let slide = pptx.addSlide();
@@ -38,7 +39,7 @@ export async function export_ppt2() {
                 // newwidth = 300dpi... 
                 // neuebreiteinpixel = neuebreiteincm * 300dpinch in cm = nbcm * 2.54 * 300
                 // neuebreiteincm = pagebreite in cm * innerw
-                const desired_dpi = 150
+                const desired_dpi = 230
                 const newwidth = parseInt(img.outerw/img.innerw * pagew * desired_dpi)
                 let imdata="";
                 if (newwidth < img.worig * 2) {
@@ -47,7 +48,7 @@ export async function export_ppt2() {
                     imdata =  await sharp($allImages[img.imid].pathorig)
                         .resize({ width: newwidth })
                         .jpeg({
-                            quality: 88
+                            quality: 91
                         })
                         .toBuffer();
                     imdata = await "data:image/jpeg;base64," + imdata.toString('base64')
