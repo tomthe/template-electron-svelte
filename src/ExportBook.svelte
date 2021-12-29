@@ -2,6 +2,7 @@
 // import {export_ppt1,export_ppt2} from './export_ppt.js'
 import pptxgen from "pptxgenjs";
 import {  allImages,bookdic } from './allimagesstore.js';
+import ExportWebsite from './ExportWebsite.svelte';
 const fs = require('fs');
 const sharp = require('sharp');
 let exportactive = false;
@@ -134,3 +135,5 @@ function mm2inch(mm) {
 <progress class="progress is-large is-info" max="100">...</progress>
 Export is running...    
 {/if}
+
+<ExportWebsite></ExportWebsite>
