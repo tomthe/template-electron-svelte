@@ -3,6 +3,7 @@
 // import pptxgen from "pptxgenjs";
 import {  allImages,bookdic } from './allimagesstore.js';
 const fs = require('fs');
+const os = require('os');
 const sharp = require('sharp');
 let exportactive = false;
 
@@ -16,7 +17,8 @@ async function export_website() {
     // const pageh = mm2inch(210 +2*3)
     // const ob =  obinch/pageh //outerborder
 
-    const path = 'C:\\dev\\svelte\\test2\\website';
+    const path =  os.homedir() + '\\fotobuchbauer\\website\\';
+    console.log("webite-path: ", path)
 
     let hs = `<body style="background-color: black;"> `
 
@@ -71,6 +73,12 @@ async function export_website() {
     console.log("after saving export")
     exportactive=false;
 }
+function print_dirs(){
+    console.log("homedir: ",os.homedir());
+    console.log("tempdir: ",os.tmpdir());
+    let path = os.homedir() + "\\fotobuchbauer\\"
+    fs.mkdirSync(path)
+}
 
 </script>
 
@@ -81,3 +89,5 @@ async function export_website() {
 <progress class="progress is-large is-info" max="100">...</progress>
 Web-Export is running...    
 {/if}
+
+<button on:click={print_dirs}>print_dirs</button>

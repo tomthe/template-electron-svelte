@@ -5,6 +5,7 @@
   import {  allImages,bookdic } from './allimagesstore.js';
   const app = require('electron');
   const fs = require('fs');
+  const os = require('os');
   const path = require('path');
   import  SingleImage  from './SingleImage.svelte'
   import { Button } from 'svelma';
@@ -65,8 +66,18 @@ let rangewidth = 230;
   }
 
   function put_image_into_allimages_and_generate_thumb(pathorig,rating=0){
-  //let thumbname = 'C:\\dev\\svelte\\test\\o' + i.toString() +(((1+Math.random())*0x10000)|0).toString(16).substring(1) + 'g3.jpg';
-  let thumbname = 'C:\\dev\\svelte\\test\\o' + generateHash(pathorig) + 'g3.jpg'
+ 
+  if (!fs.existsSync(path.join(os.homedir(), '\\fotobuchbauer'))){  
+    fs.mkdirSync(path.join(os.homedir(), '\\fotobuchbauer'))
+  }
+  
+  if (!fs.existsSync(path.join(os.homedir(), 'fotobuchbauer','thumbnails'))){  
+    fs.mkdirSync(path.join(os.homedir(), 'fotobuchbauer','thumbnails'))
+  }
+
+
+  //let thumbname = 'C:\\dev\\svelte\\test\\o' + generateHash(pathorig) + 'g3.jpg'
+  const thumbname =  path.join(os.homedir(), 'fotobuchbauer','thumbnails','t' + generateHash(pathorig) + 'g4.jpg')
   sharp(pathorig)
     .metadata()
     .then((metadata)=> {
