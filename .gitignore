@@ -4,3 +4,8 @@ public/build
 dist
 *.jpg
 *.png
+*.pptx
+*.json
+*.pak
+fotobuchbauer-win32-x64
+*.zip

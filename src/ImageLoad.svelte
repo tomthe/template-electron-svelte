@@ -171,6 +171,7 @@ export function saveallImages2(){
     //console.log("userdata-path:", app.getPath('userData'))
     fs.writeFileSync("defaultbookdic.json",JSON.stringify($bookdic));
     fs.writeFileSync("defaultallImages.json",JSON.stringify($allImages));
+    console.log("save all-")
 }
 
 function generateHash(inputstr){

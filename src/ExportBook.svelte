@@ -14,8 +14,8 @@ export async function export_ppt2() {
     let pptx = new pptxgen();
     // Define new layout for the Presentation
     const obinch = mm2inch(4.5) //outerbordermm 
-    const pagew = mm2inch(297 + 2*3) // page-width in inch
-    const pageh = mm2inch(210 +2*3)
+    const pagew = mm2inch(297 + 2*3) // page-width in inch mm2inch(634+17)//Umschlag    
+    const pageh = mm2inch(210 +2*3) //mm2inch(245)//Umschlag
     const ob =  obinch/pageh //outerborder
 
     pptx.defineLayout({ name:'A4wideplus3mm', width:pagew, height:pageh });
