@@ -1,6 +1,7 @@
-# template-electron-svelte
+# Fotobook generator
 
-Starter project with basic Svelte and Electron setup
+Select images from your computer and generate lots of collages.
+Export as Powerpoint
 
 ## How to build
 
