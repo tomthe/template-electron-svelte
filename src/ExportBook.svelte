@@ -7,6 +7,10 @@ const fs = require('fs');
 const sharp = require('sharp');
 let exportactive = false;
 
+let pagewmm = 297 + 2*3; // page-width in inch 
+let pagehmm = 210 +2*3; // page-height in inch 
+
+
 export async function export_ppt2() {
     console.log("start export")
     exportactive = true;
@@ -14,8 +18,8 @@ export async function export_ppt2() {
     let pptx = new pptxgen();
     // Define new layout for the Presentation
     const obinch = mm2inch(4.5) //outerbordermm 
-    const pagew = mm2inch(297 + 2*3) // page-width in inch mm2inch(634+17)//Umschlag    
-    const pageh = mm2inch(210 +2*3) //mm2inch(245)//Umschlag
+    const pagew = mm2inch(pagewmm) // page-width in inch mm2inch(634+17)//Umschlag    
+    const pageh = mm2inch(pagehmm) //mm2inch(245)//Umschlag
     const ob =  obinch/pageh //outerborder
 
     pptx.defineLayout({ name:'A4wideplus3mm', width:pagew, height:pageh });
@@ -128,6 +132,11 @@ function mm2inch(mm) {
 
 </script>
 
+page width: {pagewmm} mm (297 + 2*3) for A4 wide
+<input class="input" type="range" min="1" max="600" step="1" bind:value={pagewmm}>
+    
+page height: {pagehmm} mm (210 +2*3) for A4 wide
+<input class="input" type="range" min="1" max="600" step="1" bind:value={pagehmm}>
 
 <!-- <button on:click={export_ppt1}>export collage!</button> -->
 <button on:click={export_ppt2}>export collage2!</button>
